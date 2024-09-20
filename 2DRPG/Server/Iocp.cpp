@@ -150,7 +150,7 @@ void Iocp::WorkerThread()
 				int packetsize = p[0];
 				if (packetsize <= remain_data)
 				{
-					// ProcessPacket();
+					ProcessPacket(static_cast<int>(key),p);
 					p = p + packetsize;
 					remain_data = remain_data - packetsize;
 
@@ -167,8 +167,36 @@ void Iocp::WorkerThread()
 	}
 }
 
-void Iocp::ProcessPacket()
+void Iocp::ProcessPacket(int id,char* packet)
 {
+	switch (packet[1])
+	{
+
+	case CS_LOGIN: {
+		CS_LOGIN_PACKET* p = reinterpret_cast<CS_LOGIN_PACKET*>(packet);
+		_clients[id].setId(p->id);
+		_clients[id].setName(p->name);
+	}
+				 break;
+	case CS_ATTACK: {
+
+	}
+				  break;
+	case CS_CHAT: {
+
+	}
+				break;
+	case CS_MOVE_PLAYER: {
+
+	}
+					   break;
+	case CS_MOVE_NPC: {
+
+	}
+					break;
+
+
+	}
 }
 
 void Iocp::disconnect()
