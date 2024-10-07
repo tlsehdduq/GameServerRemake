@@ -65,3 +65,40 @@ void Session::doSend(void* packet)
     OVERLAPPED_EX* sendover = new OVERLAPPED_EX{ reinterpret_cast<char*>(packet) };
     WSASend(_socket, &sendover->_wsaBuf, 1, 0, 0, &sendover->_over, 0);
 }
+
+void Session::sendLoginPacket()
+{
+    SC_LOGIN_PACKET p;
+    p.size = sizeof(SC_LOGIN_PACKET);
+    p.type = SC_LOGIN;
+    p.id = _id;
+    p.x = 0;
+    p.y = 0;
+    p.max_hp = 50;
+    p.hp = 50;
+    p.level = 1;
+    doSend(&p);
+}
+
+void Session::sendAddPacket(const Session& client)
+{
+    SC_ADD_PACKET p;
+    p.size = sizeof(SC_ADD_PACKET);
+    p.type = SC_ADD_OBJECT;
+    p.id = client._id;
+    p.x = client._x;
+    p.y = client._y;
+    memcpy(p.name, client._name, sizeof(p.name));
+    doSend(&p);
+}
+
+void Session::sendMoverPlayerPacket(const Session& client)
+{
+    SC_MOVE_PLAYER_PACKET p;
+    p.size = sizeof(SC_MOVE_PLAYER_PACKET);
+    p.type = SC_MOVE_PLAYER;
+    p.id = client._id;
+    p.x = client._x;
+    p.y = client._y;
+    doSend(&p);
+}

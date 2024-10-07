@@ -5,6 +5,7 @@ constexpr int BUF_SIZE = 1000;
 constexpr int NAME_SIZE = 20;
 constexpr int CHAT_SIZE = 100;
 constexpr int MAX_USER = 15;
+constexpr int MAX_NPC = 200;
 
 constexpr char CS_LOGIN = 0;
 constexpr char CS_MOVE_PLAYER = 1;
@@ -17,13 +18,14 @@ constexpr char SC_ADD_OBJECT = 1;
 constexpr char SC_MOVE_PLAYER = 2;
 constexpr char SC_MOVE_OBJECT = 3;
 constexpr char SC_CHAT = 4;
+constexpr char SC_REMOVE = 5;
 
 struct CS_LOGIN_PACKET
 {
 	unsigned char size;
 	char type;
 	char name[NAME_SIZE];
-	int id;
+	//int id = -1;
 
 };
 struct CS_MOVE_PLAYER_PACKET
@@ -93,4 +95,9 @@ struct SC_CHAT_PACKET
 	char type;
 	int id;
 	char message[CHAT_SIZE];
+};
+struct SC_REMOVE_PACKET {
+	unsigned char size;
+	char type;
+	int id;
 };

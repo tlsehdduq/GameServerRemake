@@ -1,6 +1,6 @@
 #pragma once
 #include"Session.h"
-
+ 
 class Iocp
 {
 public:
@@ -13,8 +13,11 @@ public:
 	void WorkerThread();
 	void ProcessPacket(int id, char* packet);
 	void disconnect();
+	
+	int CreateId();
+	void InitializedMonster();
 
-	int Getclientid();
+
 public:
 	SOCKET GetListenSocket();
 	SOCKET GetClientSocket();
@@ -42,6 +45,7 @@ public:
 	thread _timerthread;
 	vector<thread> _workerthread;
 	array<Session, MAX_USER> _clients;
+	array<Monster, MAX_NPC> _npcs;
 
 	
 };

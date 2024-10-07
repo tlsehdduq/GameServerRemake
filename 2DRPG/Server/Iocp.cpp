@@ -68,9 +68,15 @@ void Iocp::Run()
 			cout << err << "  - Error " << endl;
 		}
 	}
+
+	InitializedMonster();
+
 	int num_thread = thread::hardware_concurrency();
 	for (int i = 0; i < num_thread; ++i)
 		_workerthread.emplace_back(&Iocp::WorkerThread, this);
+
+	for (auto& th : _workerthread)
+		th.join();
 
 }
 
@@ -108,7 +114,7 @@ void Iocp::WorkerThread()
 		switch (over_ex->_type)
 		{
 		case COMP_TYPE::Accept: {
-			int client_id = Getclientid();
+			int client_id = CreateId();
 			if (client_id != -1)
 			{
 				// 정보저장 
@@ -122,7 +128,6 @@ void Iocp::WorkerThread()
 				std::uniform_real_distribution<float> r_y; // 맵 사이즈를 정해야함 
 				_clients[client_id].setPosx(r_x(dre));
 				_clients[client_id].setPosy(r_y(dre));
-				//_clients[client_id].setName()
 				_clients[client_id].setId(client_id);
 				_clients[client_id].setSocket(_clientsocket);
 				CreateIoCompletionPort(reinterpret_cast<HANDLE>(_clientsocket), _iocphandle, client_id, 0);
@@ -174,8 +179,21 @@ void Iocp::ProcessPacket(int id,char* packet)
 
 	case CS_LOGIN: {
 		CS_LOGIN_PACKET* p = reinterpret_cast<CS_LOGIN_PACKET*>(packet);
-		_clients[id].setId(p->id);
+		//_clients[id].setId(p->id);
 		_clients[id].setName(p->name);
+		// 다시 보내야함 
+		_clients[id].sendLoginPacket();
+
+		for (auto& pl : _clients)
+		{
+			// SEND ADD PACKET 
+			if (pl.getId() == -1)break;
+			if (pl.getId() == id)continue;
+			pl.sendAddPacket(_clients[id]);
+			_clients[id].sendAddPacket(pl);
+		}
+
+
 	}
 				 break;
 	case CS_ATTACK: {
@@ -187,7 +205,30 @@ void Iocp::ProcessPacket(int id,char* packet)
 	}
 				break;
 	case CS_MOVE_PLAYER: {
-
+		CS_MOVE_PLAYER_PACKET* p = reinterpret_cast<CS_MOVE_PLAYER_PACKET*>(packet);
+		switch (p->dir) {
+		case 0:
+			if (_clients[id].getPosy() <= 0) _clients[id].setPosy(0);
+			else
+				_clients[id].setPosy(_clients[id].getPosy() - 1);
+			break;
+		case 1:
+				_clients[id].setPosy(_clients[id].getPosy() + 1);
+			break;
+		case 2:
+				_clients[id].setPosx(_clients[id].getPosx() - 1);
+			
+			break;
+		case 3:
+				_clients[id].setPosx(_clients[id].getPosx() + 1);
+			break;
+		}
+		_clients[id].sendMoverPlayerPacket(_clients[id]); // 나한테 내가 움직인걸 보낸다 .
+		for (auto& pl : _clients)
+		{
+			if (pl.getId() == id)continue;
+			pl.sendMoverPlayerPacket(_clients[id]);
+		}
 	}
 					   break;
 	case CS_MOVE_NPC: {
@@ -203,9 +244,28 @@ void Iocp::disconnect()
 {
 }
 
-int Iocp::Getclientid()
+int Iocp::CreateId()
 {
-	return 0;
+	for (int i = 0; i < MAX_USER; ++i)
+	{
+		if (_clients[i].getId() == -1)return i;
+	}
+	cout << " MAX USER " << endl;
+	return -1;
+}
+
+void Iocp::InitializedMonster()
+{
+	default_random_engine dre;
+	uniform_int_distribution<int> uid;
+	int npcid = 0;
+	for (auto& npc : _npcs)
+	{
+		npc.setPosx(uid(dre));
+		npc.setPosy(uid(dre));
+		npc.setId(npcid);
+		npcid++;
+	}
 }
 
 SOCKET Iocp::GetListenSocket()
