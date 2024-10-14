@@ -102,3 +102,50 @@ void Session::sendMoverPlayerPacket(const Session& client)
     p.y = client._y;
     doSend(&p);
 }
+
+//void Player::move()
+//{
+//}
+
+void Player::sendMonsterInit(Monster& monster)
+{
+    SC_MONTSER_INIT_PACKET p;
+    p.size = sizeof(SC_MONTSER_INIT_PACKET);
+    p.type = SC_MONTSER_INIT;
+    p.x = monster.getPosx();
+    p.y = monster.getPosy();
+    p.id = monster.getId();
+    doSend(&p);
+
+    
+}
+
+void Player::sendMonsterMove(Monster& monster)
+{
+    SC_MONSTER_MOVE_PACKET p;
+    p.size = sizeof(SC_MONSTER_MOVE_PACKET);
+    p.type = SC_MONSTER_MOVE;
+    p.id = monster.getId();
+    p.x = monster.getPosx();
+    p.y = monster.getPosy();
+    doSend(&p);
+}
+
+void Monster::move()
+{
+    switch (rand() % 4)
+    {
+    case 0:
+        setPosx(getPosx() + 1);
+        break;
+    case 1:
+        setPosx(getPosx() - 1);
+        break;
+    case 2:
+        setPosy(getPosy() + 1);
+        break;
+    case 3:
+        setPosy(getPosy() - 1);
+        break;
+    }   
+}

@@ -17,7 +17,8 @@
 using namespace std;
 
 // Overlapped	
-enum class COMP_TYPE : char { Accept, Recv, Send };
+enum class COMP_TYPE : char { Accept, Recv, Send, NPC_UPDATE, NPC_INITIALIZED };
+enum class EVENT_TYPE : char { EV_INIT,EV_ATTACK,EV_NPC_MOVE };
  //Overlapped	
 class OVERLAPPED_EX
 {
@@ -42,6 +43,26 @@ public:
 	WSAOVERLAPPED _over;
 	WSABUF _wsaBuf;
 	char _sendbuf[200];
+	int target_id;
 	COMP_TYPE _type;
+};
+
+struct TimerEvent {
+	std::chrono::system_clock::time_point wakeupTime;
+	int n_id; // monster id 
+	int c_id; // client id  
+	EVENT_TYPE evtype;
+	constexpr bool operator < (const TimerEvent& L ) const {
+		return (wakeupTime > L.wakeupTime);
+	}
+	TimerEvent() {}
+
+	TimerEvent(std::chrono::system_clock::time_point w_t, int id, EVENT_TYPE e_id) : wakeupTime(w_t), c_id(id),evtype(e_id)
+	{
+	}
+
+	TimerEvent(std::chrono::system_clock::time_point w_t,int nid, int cid, EVENT_TYPE e_id) : wakeupTime(w_t),n_id(nid),  c_id(cid), evtype(e_id)
+	{
+	}
 };
 

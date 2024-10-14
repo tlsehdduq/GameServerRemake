@@ -68,15 +68,17 @@ void Iocp::Run()
 			cout << err << "  - Error " << endl;
 		}
 	}
-
+	_timer.setIocpHandle(_iocphandle);
+	start_time = chrono::system_clock::now();
 	InitializedMonster();
-
 	int num_thread = thread::hardware_concurrency();
 	for (int i = 0; i < num_thread; ++i)
 		_workerthread.emplace_back(&Iocp::WorkerThread, this);
 
+
 	for (auto& th : _workerthread)
 		th.join();
+
 
 }
 
@@ -155,7 +157,7 @@ void Iocp::WorkerThread()
 				int packetsize = p[0];
 				if (packetsize <= remain_data)
 				{
-					ProcessPacket(static_cast<int>(key),p);
+					ProcessPacket(static_cast<int>(key), p);
 					p = p + packetsize;
 					remain_data = remain_data - packetsize;
 
@@ -168,11 +170,22 @@ void Iocp::WorkerThread()
 			_clients[key].doRecv();
 		}
 							break;
+		case COMP_TYPE::NPC_UPDATE: {
+			_npcs[over_ex->target_id].move();
+			int c_id = static_cast<int>(key);
+			_clients[c_id].sendMonsterMove(_npcs[over_ex->target_id]);
+			TimerEvent ev{ std::chrono::system_clock::now() + std::chrono::seconds(1s),over_ex->target_id,c_id,EVENT_TYPE::EV_NPC_MOVE };
+			_timer.InitTimerQueue(ev);
+			delete over_ex;
+			break;
+		}
+		default:
+			break;
 		}
 	}
 }
 
-void Iocp::ProcessPacket(int id,char* packet)
+void Iocp::ProcessPacket(int id, char* packet)
 {
 	switch (packet[1])
 	{
@@ -181,18 +194,29 @@ void Iocp::ProcessPacket(int id,char* packet)
 		CS_LOGIN_PACKET* p = reinterpret_cast<CS_LOGIN_PACKET*>(packet);
 		//_clients[id].setId(p->id);
 		_clients[id].setName(p->name);
+		{
+			lock_guard<mutex>ll{ _clients[id]._s_lock };
+			_clients[id]._state = STATE::Ingame;
+		}
 		// 다시 보내야함 
 		_clients[id].sendLoginPacket();
-
 		for (auto& pl : _clients)
 		{
+			{
+				lock_guard<mutex>ll(pl._s_lock);
+				if (pl._state != STATE::Ingame);
+			}
 			// SEND ADD PACKET 
-			if (pl.getId() == -1)break;
 			if (pl.getId() == id)continue;
 			pl.sendAddPacket(_clients[id]);
 			_clients[id].sendAddPacket(pl);
 		}
-
+		for (auto& npc : _npcs)
+		{
+			_clients[id].sendMonsterInit(npc); // NPC의 정보들을 뿌려준다. 
+			NpcOn(npc.getId(), id);
+			// 그러나 왜 안움직이지 ? 
+		}
 
 	}
 				 break;
@@ -213,14 +237,14 @@ void Iocp::ProcessPacket(int id,char* packet)
 				_clients[id].setPosy(_clients[id].getPosy() - 1);
 			break;
 		case 1:
-				_clients[id].setPosy(_clients[id].getPosy() + 1);
+			_clients[id].setPosy(_clients[id].getPosy() + 1);
 			break;
 		case 2:
-				_clients[id].setPosx(_clients[id].getPosx() - 1);
-			
+			_clients[id].setPosx(_clients[id].getPosx() - 1);
+
 			break;
 		case 3:
-				_clients[id].setPosx(_clients[id].getPosx() + 1);
+			_clients[id].setPosx(_clients[id].getPosx() + 1);
 			break;
 		}
 		_clients[id].sendMoverPlayerPacket(_clients[id]); // 나한테 내가 움직인걸 보낸다 .
@@ -254,18 +278,36 @@ int Iocp::CreateId()
 	return -1;
 }
 
-void Iocp::InitializedMonster()
+void Iocp::InitializedMonster() // 몬스터 랜덤 좌표지정 
 {
 	default_random_engine dre;
-	uniform_int_distribution<int> uid;
+	uniform_int_distribution<int> uid{ 0, 50 };
 	int npcid = 0;
 	for (auto& npc : _npcs)
 	{
 		npc.setPosx(uid(dre));
 		npc.setPosy(uid(dre));
 		npc.setId(npcid);
+		// 셋과 동시에 몬스터 움직이게 . 
+
 		npcid++;
 	}
+	// 여기서 몬스터 정보 전송? 
+
+}
+
+void Iocp::NpcOn(int npcid, int clid)
+{
+	if (_npcs[npcid].isalive)return;
+	bool oldstate = false;
+	if (false == atomic_compare_exchange_strong(&_npcs[npcid].isalive, &oldstate, true))
+		return;
+	OVERLAPPED_EX* exover = new OVERLAPPED_EX;
+	exover->_type = COMP_TYPE::NPC_UPDATE;
+	exover->target_id = npcid;
+	PostQueuedCompletionStatus(_iocphandle, 1, clid, &exover->_over);
+
+
 }
 
 SOCKET Iocp::GetListenSocket()
