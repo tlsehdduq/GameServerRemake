@@ -9,15 +9,19 @@ public:
 	int getId();
 	SOCKET getSocket();
 	char* getName();
+	int getMoveTime();
 
 	void setPosx(short x);
 	void setPosy(short y);
 	void setId(int id);
 	void setSocket(SOCKET socket);
 	void setName(char* name);
+	void setMoveTime(int time);
 
 	void doRecv();
 	void doSend(void* packet);
+
+	bool can_see(int from, int to, int type);
 
 public:
 	//virtual void move() = 0;
@@ -34,6 +38,7 @@ private:
 	int _hp = 0;
 	int _maxhp = 0;
 	int _att = 0;
+	int _last_move_time;
 
 	SOCKET _socket;
 	char _name[NAME_SIZE];
@@ -43,6 +48,9 @@ public:
 	STATE _state;
 	mutex _s_lock;
 	int _prevremain;
+	int _viewrange = 3;
+	unordered_set <int> _view_list;
+	mutex _vl;
 
 };
 class Monster;
@@ -61,11 +69,9 @@ private:
 
 class Monster : public Session
 {
-
 public:
 	//void move() override;
 	//void attack() override;
-	bool can_see(int to, int from);
 	void move();
 	atomic_bool isalive = false;
 	mutex _lock;

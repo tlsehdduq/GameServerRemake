@@ -1,14 +1,12 @@
 #include "stdafx.h"
 #include"Iocp.h"
 
-extern array<Player, MAX_USER> _clients;
-extern array<Monster, MAX_NPC> _npcs;
-
+array<Player, MAX_USER> _clients;
+array<Monster, MAX_NPC> _npcs;
+HANDLE _iocphandle;
 int main()
 {
 	Iocp iocp;
-
 	iocp.Run();
-
 
 }

@@ -4,8 +4,8 @@ constexpr int PORT_NUM = 9000;
 constexpr int BUF_SIZE = 1000;
 constexpr int NAME_SIZE = 20;
 constexpr int CHAT_SIZE = 100;
-constexpr int MAX_USER = 15;
-constexpr int MAX_NPC = 5;
+constexpr int MAX_USER = 1000;
+constexpr int MAX_NPC = 10000;
 
 constexpr char CS_LOGIN = 0;
 constexpr char CS_MOVE_PLAYER = 1;
@@ -35,6 +35,7 @@ struct CS_MOVE_PLAYER_PACKET
 	unsigned char size;
 	char type;
 	char dir;
+	unsigned int move_time;
 	// move_time? 
 
 };
@@ -83,6 +84,7 @@ struct SC_MOVE_PLAYER_PACKET
 	char type;
 	int id; 
 	short x, y;
+	unsigned int move_time;
 };
 struct SC_MOVE_NPC_PACKET
 {

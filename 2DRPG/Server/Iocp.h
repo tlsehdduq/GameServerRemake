@@ -1,6 +1,9 @@
 #pragma once
 #include"Session.h"
 #include"Timer.h"
+
+
+
 class Iocp
 {
 public:
@@ -13,10 +16,12 @@ public:
 	void WorkerThread();
 	void ProcessPacket(int id, char* packet);
 	void disconnect();
-	
+
 	int CreateId();
 	void InitializedMonster();
-	void NpcOn(int npcid,int clid);
+	void NpcMoveOn(int npcid, int id);
+
+	bool CanSee(int from, int  to, int type);
 
 public:
 	SOCKET GetListenSocket();
@@ -38,16 +43,17 @@ private:
 	SOCKET _listensocket;
 	SOCKET _clientsocket;
 	OVERLAPPED_EX _over;
-	HANDLE _iocphandle;
 	Timer _timer;
 
 	std::chrono::system_clock::time_point start_time;
+
 
 public:
 
 	thread _timerthread;
 	vector<thread> _workerthread;
-	array<Player, MAX_USER> _clients;
-	array<Monster, MAX_NPC> _npcs;
+
+	//array<Player, MAX_USER> _clients;
+	//array<Monster, MAX_NPC> _npcs;
 };
 

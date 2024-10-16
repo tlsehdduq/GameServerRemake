@@ -1,6 +1,8 @@
 #include"stdafx.h"
 #include "Timer.h"
 
+extern HANDLE _iocphandle;
+
 Timer::Timer()
 {
 	isRunning = true;
@@ -26,6 +28,7 @@ void Timer::TimerThread()
 			{
 				if (ev.wakeupTime > cur_time)
 				{
+					_timerqueue.push(ev);
 					this_thread::sleep_for(30ms);
 					continue;
 				}
@@ -35,12 +38,18 @@ void Timer::TimerThread()
 					OVERLAPPED_EX* ov = new OVERLAPPED_EX;
 					ov->_type = COMP_TYPE::NPC_UPDATE;
 					ov->target_id = ev.n_id;
-					PostQueuedCompletionStatus(_iocphandle, 1, ev.c_id, &ov->_over);
-					break;
+
+					if (PostQueuedCompletionStatus(_iocphandle, 1, ev.c_id, &ov->_over) == FALSE)
+					{
+						std::cerr << "Failed to post to IOCP: " << GetLastError() << std::endl;
+					}
 				}
+											break;
 				}
-			}
+			}continue;
 		}
+		else
+			this_thread::yield();
 	}
 }
 
