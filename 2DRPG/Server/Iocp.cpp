@@ -184,8 +184,7 @@ void Iocp::WorkerThread()
 				{
 					keepalive = true;
 					break;
-				}else 
-				_npcs[over_ex->target_id].isalive = false;
+				}
 			}
 			if (keepalive) { // 이미 시야거리에 들어와있음 can_see를 또할필요가? X 
 				int c_id = static_cast<int>(key);
@@ -216,8 +215,8 @@ void Iocp::ProcessPacket(int id, char* packet)
 		{
 			lock_guard<mutex>ll{ _clients[id]._s_lock };
 			_clients[id]._state = STATE::Ingame;
-			_clients[id].setPosx(rand() % 1000);
-			_clients[id].setPosy(rand() % 1000);
+			_clients[id].setPosx(rand() % W_WIDTH);
+			_clients[id].setPosy(rand() % W_HEIGHT);
 		}
 		// 다시 보내야함 
 		_clients[id].sendLoginPacket();
@@ -235,9 +234,9 @@ void Iocp::ProcessPacket(int id, char* packet)
 		// 이것도 수정 
 		for (auto& npc : _npcs)
 		{
-			if (npc.isalive == true)continue;
-			_clients[id].sendMonsterInit(npc); // NPC의 정보들을 뿌려준다. 그럴필요있나? 이것도 시야거리 .. 
+			if (npc.isalive == false)continue;
 			if (_clients[id].can_see(id, npc.getId(), 2)) {
+				_clients[id].sendMonsterInit(npc); // NPC의 모든 정보들을 전송? 시야거리에 있는 애들만 전송 
 				NpcMoveOn(npc.getId(), id); // NPC 타이머 작동 
 			}
 		}
@@ -313,12 +312,21 @@ void Iocp::ProcessPacket(int id, char* packet)
 		}
 		for (auto& npc : _npcs)
 		{
-			if (_clients[id].can_see(id, npc.getId(), 2) == false) {
-				npc.isalive = false; continue;
+			if (_clients[id].can_see(id, npc.getId(), 2)) {
+				if (_clients[id].monster_view_list.count(npc.getId()) != 0) // 이미 뷰리스트에 올라와있다면? move 
+					NpcMoveOn(npc.getId(), id);
+				else
+					//시야거리에 들어왔는데 뷰리스트에 없다? 그렇다면 일단 add 먼저 
+					_clients[id].sendMonsterInit(npc);
 			}
 			else
-				NpcMoveOn(npc.getId(), id);
-
+			{
+				if (_clients[id].monster_view_list.count(npc.getId()) != 0) // 이미 뷰리스트에 올라와있다면? move 
+				{
+				_clients[id].monster_view_list.erase(npc.getId());
+				npc.isalive = false;
+				}
+			}
 		}
 	}
 					   break;
@@ -360,10 +368,10 @@ void Iocp::InitializedMonster() // 몬스터 랜덤 좌표지정
 
 void Iocp::NpcMoveOn(int npcid, int id)
 {
-
 	bool old_state = false;
 	if (false == atomic_compare_exchange_strong(&_npcs[npcid].isalive, &old_state, true))return;
 
+	// false -> true 타이머 실행 
 	TimerEvent ev{ chrono::system_clock::now(),npcid,id,EVENT_TYPE::EV_NPC_MOVE };
 	_timer.InitTimerQueue(ev);
 }

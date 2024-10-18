@@ -7,6 +7,9 @@ constexpr int CHAT_SIZE = 100;
 constexpr int MAX_USER = 10000;
 constexpr int MAX_NPC = 100000;
 
+constexpr int W_WIDTH = 1000;
+constexpr int W_HEIGHT = 1000;
+
 constexpr char CS_LOGIN = 0;
 constexpr char CS_MOVE_PLAYER = 1;
 constexpr char CS_ATTACK = 2;
