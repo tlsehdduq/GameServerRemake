@@ -1,0 +1,221 @@
+{
+  "version": "2.1.0",
+  "$schema": "https://schemastore.azurewebsites.net/schemas/json/sarif-2.1.0-rtm.5.json",
+  "runs": [
+    {
+      "results": [
+        {
+          "ruleId": "C26495",
+          "message": {
+            "text": "'OVERLAPPED_EX::_sendbuf' 변수가 초기화되지 않았습니다. 항상 멤버 변수를 초기화하세요(type.6)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/Users/tlseh/Desktop/게임서버 포폴/GameServerRemake/2DRPG/Server/stdafx.h"
+                },
+                "region": {
+                  "startLine": 26,
+                  "startColumn": 2
+                }
+              },
+              "logicalLocations": [
+                {
+                  "fullyQualifiedName": "OVERLAPPED_EX::{ctor}",
+                  "decoratedName": "??0OVERLAPPED_EX@@QEAA@XZ",
+                  "kind": "function"
+                }
+              ]
+            }
+          ],
+          "properties": {
+            "targetSymbol": "OVERLAPPED_EX::_sendbuf"
+          }
+        },
+        {
+          "ruleId": "C26495",
+          "message": {
+            "text": "'OVERLAPPED_EX::target_id' 변수가 초기화되지 않았습니다. 항상 멤버 변수를 초기화하세요(type.6)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/Users/tlseh/Desktop/게임서버 포폴/GameServerRemake/2DRPG/Server/stdafx.h"
+                },
+                "region": {
+                  "startLine": 26,
+                  "startColumn": 2
+                }
+              },
+              "logicalLocations": [
+                {
+                  "fullyQualifiedName": "OVERLAPPED_EX::{ctor}",
+                  "decoratedName": "??0OVERLAPPED_EX@@QEAA@XZ",
+                  "kind": "function"
+                }
+              ]
+            }
+          ],
+          "properties": {
+            "targetSymbol": "OVERLAPPED_EX::target_id"
+          }
+        },
+        {
+          "ruleId": "C26495",
+          "message": {
+            "text": "'TimerEvent::c_id' 변수가 초기화되지 않았습니다. 항상 멤버 변수를 초기화하세요(type.6)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/Users/tlseh/Desktop/게임서버 포폴/GameServerRemake/2DRPG/Server/stdafx.h"
+                },
+                "region": {
+                  "startLine": 58,
+                  "startColumn": 2
+                }
+              },
+              "logicalLocations": [
+                {
+                  "fullyQualifiedName": "TimerEvent::{ctor}",
+                  "decoratedName": "??0TimerEvent@@QEAA@XZ",
+                  "kind": "function"
+                }
+              ]
+            }
+          ],
+          "properties": {
+            "targetSymbol": "TimerEvent::c_id"
+          }
+        },
+        {
+          "ruleId": "C26495",
+          "message": {
+            "text": "'TimerEvent::n_id' 변수가 초기화되지 않았습니다. 항상 멤버 변수를 초기화하세요(type.6)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/Users/tlseh/Desktop/게임서버 포폴/GameServerRemake/2DRPG/Server/stdafx.h"
+                },
+                "region": {
+                  "startLine": 58,
+                  "startColumn": 2
+                }
+              },
+              "logicalLocations": [
+                {
+                  "fullyQualifiedName": "TimerEvent::{ctor}",
+                  "decoratedName": "??0TimerEvent@@QEAA@XZ",
+                  "kind": "function"
+                }
+              ]
+            }
+          ],
+          "properties": {
+            "targetSymbol": "TimerEvent::n_id"
+          }
+        },
+        {
+          "ruleId": "C26495",
+          "message": {
+            "text": "'TimerEvent::evtype' 변수가 초기화되지 않았습니다. 항상 멤버 변수를 초기화하세요(type.6)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/Users/tlseh/Desktop/게임서버 포폴/GameServerRemake/2DRPG/Server/stdafx.h"
+                },
+                "region": {
+                  "startLine": 58,
+                  "startColumn": 2
+                }
+              },
+              "logicalLocations": [
+                {
+                  "fullyQualifiedName": "TimerEvent::{ctor}",
+                  "decoratedName": "??0TimerEvent@@QEAA@XZ",
+                  "kind": "function"
+                }
+              ]
+            }
+          ],
+          "properties": {
+            "targetSymbol": "TimerEvent::evtype"
+          }
+        },
+        {
+          "ruleId": "C26495",
+          "message": {
+            "text": "'TimerEvent::n_id' 변수가 초기화되지 않았습니다. 항상 멤버 변수를 초기화하세요(type.6)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/Users/tlseh/Desktop/게임서버 포폴/GameServerRemake/2DRPG/Server/stdafx.h"
+                },
+                "region": {
+                  "startLine": 60,
+                  "startColumn": 2
+                }
+              },
+              "logicalLocations": [
+                {
+                  "fullyQualifiedName": "TimerEvent::{ctor}",
+                  "decoratedName": "??0TimerEvent@@QEAA@V?$time_point@Usystem_clock@chrono@std@@V?$duration@_JU?$ratio@$00$0JIJGIA@@std@@@23@@chrono@std@@HW4EVENT_TYPE@@@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ],
+          "properties": {
+            "targetSymbol": "TimerEvent::n_id"
+          }
+        }
+      ],
+      "tool": {
+        "driver": {
+          "name": "PREfast",
+          "fullName": "PREfast Code Analysis",
+          "version": "14.41.34120.0",
+          "informationUri": "https://aka.ms/cpp/ca"
+        }
+      },
+      "invocations": [
+        {
+          "executionSuccessful": true
+        }
+      ],
+      "artifacts": [
+        {
+          "location": {
+            "uri": "file:///C:/Users/tlseh/Desktop/게임서버 포폴/GameServerRemake/2DRPG/Server/stdafx.h"
+          },
+          "roles": [
+            "resultFile"
+          ],
+          "hashes": {
+            "sha-256": "e447df3d9d0ae9b13e85f6b5aafefcede673e35501a382a071abe9ab2a35db03"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///c:/users/tlseh/desktop/게임서버 포폴/gameserverremake/2drpg/server/stdafx.cpp"
+          },
+          "roles": [
+            "analysisTarget"
+          ],
+          "hashes": {
+            "sha-256": "623e9175fc51450a53f718ab55ca15f75d86feae0b3b7c59d55104fa53d84405"
+          }
+        }
+      ]
+    }
+  ]
+}

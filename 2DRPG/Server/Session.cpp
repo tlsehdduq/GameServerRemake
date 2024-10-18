@@ -96,8 +96,8 @@ void Session::sendLoginPacket()
 	p.size = sizeof(SC_LOGIN_PACKET);
 	p.type = SC_LOGIN;
 	p.id = _id;
-	p.x = 0;
-	p.y = 0;
+	p.x = _clients[_id].getPosx();
+	p.y = _clients[_id].getPosy();
 	p.max_hp = 50;
 	p.hp = 50;
 	p.level = 1;
@@ -113,7 +113,12 @@ void Session::sendAddPacket(const Session& client)
 	p.x = client._x;
 	p.y = client._y;
 	memcpy(p.name, client._name, sizeof(p.name));
+
+	_vl.lock();
+	player_view_list.insert(client._id);
+	_vl.unlock();
 	doSend(&p);
+
 }
 
 void Session::sendMoverPlayerPacket(const Session& client)
@@ -128,6 +133,27 @@ void Session::sendMoverPlayerPacket(const Session& client)
 	doSend(&p);
 }
 
+void Session::sendRemovePacket(int id, int type)
+{
+	_vl.lock();
+	if (player_view_list.count(id))
+		player_view_list.erase(id);
+	else {
+		_vl.unlock();
+		return;
+	}
+		_vl.unlock();
+	SC_REMOVE_PACKET p;
+	p.size = sizeof(SC_REMOVE_PACKET);
+	p.type = SC_REMOVE;
+	p.id = id;
+	p.sessiontype = type; // 1 : clients 2 : monster 
+
+	doSend(&p);
+}
+
+
+
 void Player::sendMonsterInit(Monster& monster)
 {
 	SC_MONTSER_INIT_PACKET p;
@@ -137,6 +163,10 @@ void Player::sendMonsterInit(Monster& monster)
 	p.y = monster.getPosy();
 	p.id = monster.getId();
 	doSend(&p);
+
+	_vl.lock();
+	monster_view_list.insert(monster.getId()); // 몬스터가 생길때 플레이어에게 몬스터의 정보를 저장 
+	_vl.unlock();
 }
 
 void Player::sendMonsterMove(Monster& monster)
@@ -150,17 +180,14 @@ void Player::sendMonsterMove(Monster& monster)
 	doSend(&p);
 }
 
-void Monster::move()
+void Monster::move(Player& client)
 {
-	//unordered_set<int> _oldvl;
-	//for (auto& cl : _clients)
-	//{
-	//	if (STATE::Ingame != cl._state)continue;
-	//	if (can_see(cl.getId(), getId(), 2) == true)
-	//	{
-	//		_oldvl.insert(cl.getId());
-	//	}
-	//}
+	// move를 하는데 여기서 몬스터의 시야거리에 있는 플레이어들에게만 send를 해야함 viewlist 
+	unordered_set<int> _prevvl;
+	_vl.lock();
+	_prevvl = player_view_list;
+	_vl.unlock();
+
 	switch (rand() % 4)
 	{
 	case 0:
@@ -179,15 +206,31 @@ void Monster::move()
 		if (getPosy() < 0 || getPosy() > 500)break;
 		setPosy(getPosy() - 1);
 		break;
-	}
-	//unordered_set<int> _newvl;
-	//for (auto& cl : _clients)
-	//{
-	//	if (STATE::Ingame != cl._state)continue;
-	//	if (can_see(cl.getId(), getId(), 2) == true)
-	//	{
-	//		_newvl.insert(cl.getId());
-	//	}
-	//}
+	}// 몬스터 이동 
 
+	unordered_set<int> _nearvl;
+	for (auto& pl : _clients)
+	{
+		if (pl._state != STATE::Ingame)continue;
+		if (can_see(pl.getId(), getId(), 2) == true)
+		{
+			_nearvl.insert(pl.getId());
+		}
+	}
+	for (auto& pl : _nearvl)
+	{
+		auto& cl = _clients[pl];
+		cl._vl.lock();
+		if (_npcs[getId()].player_view_list.count(pl))
+		{
+			cl._vl.unlock();
+			_clients[pl].sendMonsterMove(_npcs[getId()]);
+		}
+		else
+		{
+			cl._vl.unlock();
+			_clients[pl].sendMonsterInit(_npcs[getId()]);
+		}
+		if (_prevvl.count(pl) == 0) {}
+	}
 }

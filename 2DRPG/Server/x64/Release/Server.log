@@ -1,12 +1,9 @@
 ﻿  Iocp.cpp
-C:\Users\tlseh\Desktop\게임서버 포폴\GameServerRemake\2DRPG\Server\Iocp.cpp(134,36): warning C4244: '인수': 'float'에서 'short'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Users\tlseh\Desktop\게임서버 포폴\GameServerRemake\2DRPG\Server\Iocp.cpp(135,36): warning C4244: '인수': 'float'에서 'short'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Users\tlseh\Desktop\게임서버 포폴\GameServerRemake\2DRPG\Server\Iocp.cpp(228,36): warning C4390: ';': 제어된 빈 문이 있습니다. 이 문이 필요합니까?
   Main.cpp
   Session.cpp
   코드를 생성하고 있습니다.
-  0 of 446 functions ( 0.0%) were compiled, the rest were copied from previous compilation.
-    0 functions were new in current compilation
-    0 functions had inline decision re-evaluated but remain unchanged
+  16 of 562 functions ( 2.8%) were compiled, the rest were copied from previous compilation.
+    5 functions were new in current compilation
+    1 functions had inline decision re-evaluated but remain unchanged
   코드를 생성했습니다.
   Server.vcxproj -> C:\Users\tlseh\Desktop\게임서버 포폴\GameServerRemake\2DRPG\x64\Release\Server.exe

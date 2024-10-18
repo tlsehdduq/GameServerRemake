@@ -29,6 +29,7 @@ public:
 	void sendLoginPacket();
 	void sendAddPacket(const Session& client);
 	void sendMoverPlayerPacket(const Session& client);
+	void sendRemovePacket(int id,int type);
 
 private:
 	OVERLAPPED_EX _s_over;
@@ -48,8 +49,9 @@ public:
 	STATE _state;
 	mutex _s_lock;
 	int _prevremain;
-	int _viewrange = 3;
-	unordered_set <int> _view_list;
+	int _viewrange = 10;
+	unordered_set <int> player_view_list;
+	unordered_set <int> monster_view_list;
 	mutex _vl;
 
 };
@@ -72,7 +74,7 @@ class Monster : public Session
 public:
 	//void move() override;
 	//void attack() override;
-	void move();
+	void move( Player& client);
 	atomic_bool isalive = false;
 	mutex _lock;
 private:

@@ -128,11 +128,9 @@ void Iocp::WorkerThread()
 					_clients[client_id]._state = STATE::Alloc;
 
 				}
-				std::default_random_engine dre;
-				std::uniform_real_distribution<float> r_x; // 맵 사이즈를 정해야함 
-				std::uniform_real_distribution<float> r_y; // 맵 사이즈를 정해야함 
-				_clients[client_id].setPosx(r_x(dre));
-				_clients[client_id].setPosy(r_y(dre));
+
+				_clients[client_id].setPosx(0);
+				_clients[client_id].setPosy(0);
 				_clients[client_id].setId(client_id);
 				_clients[client_id].setSocket(_clientsocket);
 				CreateIoCompletionPort(reinterpret_cast<HANDLE>(_clientsocket), _iocphandle, client_id, 0);
@@ -182,21 +180,21 @@ void Iocp::WorkerThread()
 			for (int j = 0; j < MAX_USER; ++j)
 			{
 				if (_clients[j]._state != STATE::Ingame)continue;
-				if (_clients[j].can_see(j, over_ex->target_id, 2))
+				if (_clients[j].can_see(j, over_ex->target_id, 2)) // NPC와 클라 사정거리 안에 ? 
 				{
 					keepalive = true;
 					break;
-				}
-				else
-					_npcs[over_ex->target_id].isalive = false;
+				}else 
+				_npcs[over_ex->target_id].isalive = false;
 			}
-			if (keepalive) {
-				_npcs[over_ex->target_id].move();
+			if (keepalive) { // 이미 시야거리에 들어와있음 can_see를 또할필요가? X 
 				int c_id = static_cast<int>(key);
-				_clients[c_id].sendMonsterMove(_npcs[over_ex->target_id]); // 여기서 전송을 해주기 때문에 
+				// 몬스터의 시야거리에 플레이어가 있다면 ? move 
+				_npcs[over_ex->target_id].move(_clients[c_id]);
 				TimerEvent ev{ std::chrono::system_clock::now() + std::chrono::seconds(1s),over_ex->target_id,c_id,EVENT_TYPE::EV_NPC_MOVE };
 				_timer.InitTimerQueue(ev);
 			}
+
 			delete over_ex;
 			break;
 		}
@@ -218,6 +216,8 @@ void Iocp::ProcessPacket(int id, char* packet)
 		{
 			lock_guard<mutex>ll{ _clients[id]._s_lock };
 			_clients[id]._state = STATE::Ingame;
+			_clients[id].setPosx(rand() % 1000);
+			_clients[id].setPosy(rand() % 1000);
 		}
 		// 다시 보내야함 
 		_clients[id].sendLoginPacket();
@@ -225,22 +225,22 @@ void Iocp::ProcessPacket(int id, char* packet)
 		{
 			{
 				lock_guard<mutex>ll(pl._s_lock);
-				if (pl._state != STATE::Ingame);
+				if (pl._state != STATE::Ingame)continue;
 			}
 			// SEND ADD PACKET 
-			if (pl.getId() == -1)break;
 			if (pl.getId() == id)continue;
 			pl.sendAddPacket(_clients[id]);
 			_clients[id].sendAddPacket(pl);
 		}
+		// 이것도 수정 
 		for (auto& npc : _npcs)
 		{
 			if (npc.isalive == true)continue;
-			_clients[id].sendMonsterInit(npc); // NPC의 정보들을 뿌려준다. 
-			NpcMoveOn(npc.getId(), id);
-			// 그러나 왜 안움직이지 ? 
+			_clients[id].sendMonsterInit(npc); // NPC의 정보들을 뿌려준다. 그럴필요있나? 이것도 시야거리 .. 
+			if (_clients[id].can_see(id, npc.getId(), 2)) {
+				NpcMoveOn(npc.getId(), id); // NPC 타이머 작동 
+			}
 		}
-
 	}
 				 break;
 	case CS_ATTACK: {
@@ -271,23 +271,58 @@ void Iocp::ProcessPacket(int id, char* packet)
 			_clients[id].setPosx(_clients[id].getPosx() + 1);
 			break;
 		}
-		_clients[id].sendMoverPlayerPacket(_clients[id]); // 나한테 내가 움직인걸 보낸다 .
+		unordered_set<int> nearvlist;
+		_clients[id]._vl.lock();
+		unordered_set<int> oldvlist = _clients[id].player_view_list;
+		_clients[id]._vl.unlock();
+
 		for (auto& pl : _clients)
 		{
+			if (pl._state != STATE::Ingame)continue;
 			if (pl.getId() == id)continue;
-			pl.sendMoverPlayerPacket(_clients[id]);
+			if (_clients[id].can_see(id, pl.getId(), 1)) // 1 : client client 2 : client monster
+				nearvlist.insert(pl.getId());
+			//pl.sendMoverPlayerPacket(_clients[id]);
+		}
+
+		_clients[id].sendMoverPlayerPacket(_clients[id]); // 나한테 내가 움직인걸 보낸다 .
+
+		for (auto& pl : nearvlist)
+		{
+			auto& cl = _clients[pl];
+			cl._vl.lock();
+			if (_clients[pl].player_view_list.count(id)) {
+				cl._vl.unlock();
+				_clients[pl].sendMoverPlayerPacket(_clients[id]);
+			}
+			else
+			{
+				cl._vl.unlock();
+				_clients[pl].sendAddPacket(_clients[id]);
+			}
+			if (oldvlist.count(pl) == 0)
+				_clients[id].sendAddPacket(_clients[pl]);
+		}
+		for (auto& pl : oldvlist)
+		{
+			if (nearvlist.count(pl) == 0)
+			{
+				_clients[id].sendRemovePacket(pl, 1);
+				_clients[pl].sendRemovePacket(id, 1);
+			}
 		}
 		for (auto& npc : _npcs)
 		{
-			if (_clients[id].can_see(id, npc.getId(), 2))
+			if (_clients[id].can_see(id, npc.getId(), 2) == false) {
+				npc.isalive = false; continue;
+			}
+			else
 				NpcMoveOn(npc.getId(), id);
+
 		}
 	}
 					   break;
-	case CS_MOVE_NPC: {
 
-	}
-					break;
 
 
 	}
@@ -325,26 +360,13 @@ void Iocp::InitializedMonster() // 몬스터 랜덤 좌표지정
 
 void Iocp::NpcMoveOn(int npcid, int id)
 {
-	if (_npcs[npcid].isalive == true) return;
-	_npcs[npcid].isalive = true;
+
+	bool old_state = false;
+	if (false == atomic_compare_exchange_strong(&_npcs[npcid].isalive, &old_state, true))return;
 
 	TimerEvent ev{ chrono::system_clock::now(),npcid,id,EVENT_TYPE::EV_NPC_MOVE };
 	_timer.InitTimerQueue(ev);
 }
-
-//bool Iocp::CanSee(int from, int to, int type)
-//{
-//	if (type == 1) {
-//		if (abs(_clients[from].getPosx() - _clients[to].getPosx()) > _viewrange)return false;
-//		return abs(_clients[from].getPosy() - _clients[to].getPosy()) <= _viewrange;
-//	}
-//	else
-//	{
-//		if (abs(_clients[from].getPosx() - _npcs[to].getPosx()) > _viewrange)return false;
-//		return abs(_clients[from].getPosy() - _npcs[to].getPosy()) <= _viewrange;
-//	}
-//}
-
 
 SOCKET Iocp::GetListenSocket()
 {

@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<DEFECTS>
+  <DEFECT>
+    <SFA>
+      <FILEPATH>C:\Users\tlseh\Desktop\게임서버 포폴\GameServerRemake\2DRPG\Server\</FILEPATH>
+      <FILENAME>stdafx.h</FILENAME>
+      <LINE>26</LINE>
+      <COLUMN>1</COLUMN>
+    </SFA>
+    <DEFECTCODE>26495</DEFECTCODE>
+    <DESCRIPTION>'OVERLAPPED_EX::_sendbuf' 변수가 초기화되지 않았습니다. 항상 멤버 변수를 초기화하세요(type.6).</DESCRIPTION>
+    <FUNCTION>OVERLAPPED_EX::{ctor}</FUNCTION>
+    <DECORATED>??0OVERLAPPED_EX@@QEAA@XZ</DECORATED>
+    <FUNCLINE>26</FUNCLINE>
+    <ADDITIONALINFO>
+      <targetSymbol>OVERLAPPED_EX::_sendbuf</targetSymbol>
+    </ADDITIONALINFO>
+    <PATH></PATH>
+  </DEFECT>
+  <DEFECT>
+    <SFA>
+      <FILEPATH>C:\Users\tlseh\Desktop\게임서버 포폴\GameServerRemake\2DRPG\Server\</FILEPATH>
+      <FILENAME>stdafx.h</FILENAME>
+      <LINE>26</LINE>
+      <COLUMN>1</COLUMN>
+    </SFA>
+    <DEFECTCODE>26495</DEFECTCODE>
+    <DESCRIPTION>'OVERLAPPED_EX::target_id' 변수가 초기화되지 않았습니다. 항상 멤버 변수를 초기화하세요(type.6).</DESCRIPTION>
+    <FUNCTION>OVERLAPPED_EX::{ctor}</FUNCTION>
+    <DECORATED>??0OVERLAPPED_EX@@QEAA@XZ</DECORATED>
+    <FUNCLINE>26</FUNCLINE>
+    <ADDITIONALINFO>
+      <targetSymbol>OVERLAPPED_EX::target_id</targetSymbol>
+    </ADDITIONALINFO>
+    <PATH></PATH>
+  </DEFECT>
+  <DEFECT>
+    <SFA>
+      <FILEPATH>C:\Users\tlseh\Desktop\게임서버 포폴\GameServerRemake\2DRPG\Server\</FILEPATH>
+      <FILENAME>stdafx.h</FILENAME>
+      <LINE>58</LINE>
+      <COLUMN>1</COLUMN>
+    </SFA>
+    <DEFECTCODE>26495</DEFECTCODE>
+    <DESCRIPTION>'TimerEvent::n_id' 변수가 초기화되지 않았습니다. 항상 멤버 변수를 초기화하세요(type.6).</DESCRIPTION>
+    <FUNCTION>TimerEvent::{ctor}</FUNCTION>
+    <DECORATED>??0TimerEvent@@QEAA@XZ</DECORATED>
+    <FUNCLINE>58</FUNCLINE>
+    <ADDITIONALINFO>
+      <targetSymbol>TimerEvent::n_id</targetSymbol>
+    </ADDITIONALINFO>
+    <PATH></PATH>
+  </DEFECT>
+  <DEFECT>
+    <SFA>
+      <FILEPATH>C:\Users\tlseh\Desktop\게임서버 포폴\GameServerRemake\2DRPG\Server\</FILEPATH>
+      <FILENAME>stdafx.h</FILENAME>
+      <LINE>58</LINE>
+      <COLUMN>1</COLUMN>
+    </SFA>
+    <DEFECTCODE>26495</DEFECTCODE>
+    <DESCRIPTION>'TimerEvent::evtype' 변수가 초기화되지 않았습니다. 항상 멤버 변수를 초기화하세요(type.6).</DESCRIPTION>
+    <FUNCTION>TimerEvent::{ctor}</FUNCTION>
+    <DECORATED>??0TimerEvent@@QEAA@XZ</DECORATED>
+    <FUNCLINE>58</FUNCLINE>
+    <ADDITIONALINFO>
+      <targetSymbol>TimerEvent::evtype</targetSymbol>
+    </ADDITIONALINFO>
+    <PATH></PATH>
+  </DEFECT>
+  <DEFECT>
+    <SFA>
+      <FILEPATH>C:\Users\tlseh\Desktop\게임서버 포폴\GameServerRemake\2DRPG\Server\</FILEPATH>
+      <FILENAME>stdafx.h</FILENAME>
+      <LINE>58</LINE>
+      <COLUMN>1</COLUMN>
+    </SFA>
+    <DEFECTCODE>26495</DEFECTCODE>
+    <DESCRIPTION>'TimerEvent::c_id' 변수가 초기화되지 않았습니다. 항상 멤버 변수를 초기화하세요(type.6).</DESCRIPTION>
+    <FUNCTION>TimerEvent::{ctor}</FUNCTION>
+    <DECORATED>??0TimerEvent@@QEAA@XZ</DECORATED>
+    <FUNCLINE>58</FUNCLINE>
+    <ADDITIONALINFO>
+      <targetSymbol>TimerEvent::c_id</targetSymbol>
+    </ADDITIONALINFO>
+    <PATH></PATH>
+  </DEFECT>
+  <DEFECT>
+    <SFA>
+      <FILEPATH>C:\Users\tlseh\Desktop\게임서버 포폴\GameServerRemake\2DRPG\Server\</FILEPATH>
+      <FILENAME>stdafx.h</FILENAME>
+      <LINE>60</LINE>
+      <COLUMN>1</COLUMN>
+    </SFA>
+    <DEFECTCODE>26495</DEFECTCODE>
+    <DESCRIPTION>'TimerEvent::n_id' 변수가 초기화되지 않았습니다. 항상 멤버 변수를 초기화하세요(type.6).</DESCRIPTION>
+    <FUNCTION>TimerEvent::{ctor}</FUNCTION>
+    <DECORATED>??0TimerEvent@@QEAA@V?$time_point@Usystem_clock@chrono@std@@V?$duration@_JU?$ratio@$00$0JIJGIA@@std@@@23@@chrono@std@@HW4EVENT_TYPE@@@Z</DECORATED>
+    <FUNCLINE>60</FUNCLINE>
+    <ADDITIONALINFO>
+      <targetSymbol>TimerEvent::n_id</targetSymbol>
+    </ADDITIONALINFO>
+    <PATH></PATH>
+  </DEFECT>
+  <DEFECT>
+    <SFA>
+      <FILEPATH>C:\Users\tlseh\Desktop\게임서버 포폴\GameServerRemake\2DRPG\Server\</FILEPATH>
+      <FILENAME>Session.h</FILENAME>
+      <LINE>55</LINE>
+      <COLUMN>0</COLUMN>
+    </SFA>
+    <DEFECTCODE>26495</DEFECTCODE>
+    <DESCRIPTION>'Session::_y' 변수가 초기화되지 않았습니다. 항상 멤버 변수를 초기화하세요(type.6).</DESCRIPTION>
+    <FUNCTION>Session::{ctor}</FUNCTION>
+    <DECORATED>??0Session@@QEAA@XZ</DECORATED>
+    <FUNCLINE>55</FUNCLINE>
+    <ADDITIONALINFO>
+      <targetSymbol>Session::_y</targetSymbol>
+    </ADDITIONALINFO>
+    <PATH></PATH>
+  </DEFECT>
+  <DEFECT>
+    <SFA>
+      <FILEPATH>C:\Users\tlseh\Desktop\게임서버 포폴\GameServerRemake\2DRPG\Server\</FILEPATH>
+      <FILENAME>Session.h</FILENAME>
+      <LINE>55</LINE>
+      <COLUMN>0</COLUMN>
+    </SFA>
+    <DEFECTCODE>26495</DEFECTCODE>
+    <DESCRIPTION>'Session::_x' 변수가 초기화되지 않았습니다. 항상 멤버 변수를 초기화하세요(type.6).</DESCRIPTION>
+    <FUNCTION>Session::{ctor}</FUNCTION>
+    <DECORATED>??0Session@@QEAA@XZ</DECORATED>
+    <FUNCLINE>55</FUNCLINE>
+    <ADDITIONALINFO>
+      <targetSymbol>Session::_x</targetSymbol>
+    </ADDITIONALINFO>
+    <PATH></PATH>
+  </DEFECT>
+  <DEFECT>
+    <SFA>
+      <FILEPATH>C:\Users\tlseh\Desktop\게임서버 포폴\GameServerRemake\2DRPG\Server\</FILEPATH>
+      <FILENAME>Session.h</FILENAME>
+      <LINE>55</LINE>
+      <COLUMN>0</COLUMN>
+    </SFA>
+    <DEFECTCODE>26495</DEFECTCODE>
+    <DESCRIPTION>'Session::_name' 변수가 초기화되지 않았습니다. 항상 멤버 변수를 초기화하세요(type.6).</DESCRIPTION>
+    <FUNCTION>Session::{ctor}</FUNCTION>
+    <DECORATED>??0Session@@QEAA@XZ</DECORATED>
+    <FUNCLINE>55</FUNCLINE>
+    <ADDITIONALINFO>
+      <targetSymbol>Session::_name</targetSymbol>
+    </ADDITIONALINFO>
+    <PATH></PATH>
+  </DEFECT>
+  <DEFECT>
+    <SFA>
+      <FILEPATH>C:\Users\tlseh\Desktop\게임서버 포폴\GameServerRemake\2DRPG\Server\</FILEPATH>
+      <FILENAME>Session.h</FILENAME>
+      <LINE>55</LINE>
+      <COLUMN>0</COLUMN>
+    </SFA>
+    <DEFECTCODE>26495</DEFECTCODE>
+    <DESCRIPTION>'Session::_last_move_time' 변수가 초기화되지 않았습니다. 항상 멤버 변수를 초기화하세요(type.6).</DESCRIPTION>
+    <FUNCTION>Session::{ctor}</FUNCTION>
+    <DECORATED>??0Session@@QEAA@XZ</DECORATED>
+    <FUNCLINE>55</FUNCLINE>
+    <ADDITIONALINFO>
+      <targetSymbol>Session::_last_move_time</targetSymbol>
+    </ADDITIONALINFO>
+    <PATH></PATH>
+  </DEFECT>
+  <DEFECT>
+    <SFA>
+      <FILEPATH>C:\Users\tlseh\Desktop\게임서버 포폴\GameServerRemake\2DRPG\Server\</FILEPATH>
+      <FILENAME>Session.h</FILENAME>
+      <LINE>55</LINE>
+      <COLUMN>0</COLUMN>
+    </SFA>
+    <DEFECTCODE>26495</DEFECTCODE>
+    <DESCRIPTION>'Session::_state' 변수가 초기화되지 않았습니다. 항상 멤버 변수를 초기화하세요(type.6).</DESCRIPTION>
+    <FUNCTION>Session::{ctor}</FUNCTION>
+    <DECORATED>??0Session@@QEAA@XZ</DECORATED>
+    <FUNCLINE>55</FUNCLINE>
+    <ADDITIONALINFO>
+      <targetSymbol>Session::_state</targetSymbol>
+    </ADDITIONALINFO>
+    <PATH></PATH>
+  </DEFECT>
+  <DEFECT>
+    <SFA>
+      <FILEPATH>C:\Users\tlseh\Desktop\게임서버 포폴\GameServerRemake\2DRPG\Server\</FILEPATH>
+      <FILENAME>Session.h</FILENAME>
+      <LINE>55</LINE>
+      <COLUMN>0</COLUMN>
+    </SFA>
+    <DEFECTCODE>26495</DEFECTCODE>
+    <DESCRIPTION>'Session::_socket' 변수가 초기화되지 않았습니다. 항상 멤버 변수를 초기화하세요(type.6).</DESCRIPTION>
+    <FUNCTION>Session::{ctor}</FUNCTION>
+    <DECORATED>??0Session@@QEAA@XZ</DECORATED>
+    <FUNCLINE>55</FUNCLINE>
+    <ADDITIONALINFO>
+      <targetSymbol>Session::_socket</targetSymbol>
+    </ADDITIONALINFO>
+    <PATH></PATH>
+  </DEFECT>
+  <DEFECT>
+    <SFA>
+      <FILEPATH>C:\Users\tlseh\Desktop\게임서버 포폴\GameServerRemake\2DRPG\Server\</FILEPATH>
+      <FILENAME>Session.h</FILENAME>
+      <LINE>55</LINE>
+      <COLUMN>0</COLUMN>
+    </SFA>
+    <DEFECTCODE>26495</DEFECTCODE>
+    <DESCRIPTION>'Session::_prevremain' 변수가 초기화되지 않았습니다. 항상 멤버 변수를 초기화하세요(type.6).</DESCRIPTION>
+    <FUNCTION>Session::{ctor}</FUNCTION>
+    <DECORATED>??0Session@@QEAA@XZ</DECORATED>
+    <FUNCLINE>55</FUNCLINE>
+    <ADDITIONALINFO>
+      <targetSymbol>Session::_prevremain</targetSymbol>
+    </ADDITIONALINFO>
+    <PATH></PATH>
+  </DEFECT>
+</DEFECTS>

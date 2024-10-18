@@ -4,8 +4,8 @@ constexpr int PORT_NUM = 9000;
 constexpr int BUF_SIZE = 1000;
 constexpr int NAME_SIZE = 20;
 constexpr int CHAT_SIZE = 100;
-constexpr int MAX_USER = 1000;
-constexpr int MAX_NPC = 10000;
+constexpr int MAX_USER = 10000;
+constexpr int MAX_NPC = 100000;
 
 constexpr char CS_LOGIN = 0;
 constexpr char CS_MOVE_PLAYER = 1;
@@ -104,6 +104,7 @@ struct SC_REMOVE_PACKET {
 	unsigned char size;
 	char type;
 	int id;
+	int sessiontype;
 };
 struct SC_MONTSER_INIT_PACKET {
 	unsigned char size;

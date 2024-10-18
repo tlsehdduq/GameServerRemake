@@ -1,0 +1,1272 @@
+{
+  "version": "2.1.0",
+  "$schema": "https://schemastore.azurewebsites.net/schemas/json/sarif-2.1.0-rtm.5.json",
+  "runs": [
+    {
+      "results": [
+        {
+          "ruleId": "C26495",
+          "message": {
+            "text": "'OVERLAPPED_EX::_sendbuf' 변수가 초기화되지 않았습니다. 항상 멤버 변수를 초기화하세요(type.6)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/Users/tlseh/Desktop/게임서버 포폴/GameServerRemake/2DRPG/Server/stdafx.h"
+                },
+                "region": {
+                  "startLine": 26,
+                  "startColumn": 2
+                }
+              },
+              "logicalLocations": [
+                {
+                  "fullyQualifiedName": "OVERLAPPED_EX::{ctor}",
+                  "decoratedName": "??0OVERLAPPED_EX@@QEAA@XZ",
+                  "kind": "function"
+                }
+              ]
+            }
+          ],
+          "properties": {
+            "targetSymbol": "OVERLAPPED_EX::_sendbuf"
+          }
+        },
+        {
+          "ruleId": "C26495",
+          "message": {
+            "text": "'OVERLAPPED_EX::target_id' 변수가 초기화되지 않았습니다. 항상 멤버 변수를 초기화하세요(type.6)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/Users/tlseh/Desktop/게임서버 포폴/GameServerRemake/2DRPG/Server/stdafx.h"
+                },
+                "region": {
+                  "startLine": 26,
+                  "startColumn": 2
+                }
+              },
+              "logicalLocations": [
+                {
+                  "fullyQualifiedName": "OVERLAPPED_EX::{ctor}",
+                  "decoratedName": "??0OVERLAPPED_EX@@QEAA@XZ",
+                  "kind": "function"
+                }
+              ]
+            }
+          ],
+          "properties": {
+            "targetSymbol": "OVERLAPPED_EX::target_id"
+          }
+        },
+        {
+          "ruleId": "C26495",
+          "message": {
+            "text": "'TimerEvent::c_id' 변수가 초기화되지 않았습니다. 항상 멤버 변수를 초기화하세요(type.6)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/Users/tlseh/Desktop/게임서버 포폴/GameServerRemake/2DRPG/Server/stdafx.h"
+                },
+                "region": {
+                  "startLine": 58,
+                  "startColumn": 2
+                }
+              },
+              "logicalLocations": [
+                {
+                  "fullyQualifiedName": "TimerEvent::{ctor}",
+                  "decoratedName": "??0TimerEvent@@QEAA@XZ",
+                  "kind": "function"
+                }
+              ]
+            }
+          ],
+          "properties": {
+            "targetSymbol": "TimerEvent::c_id"
+          }
+        },
+        {
+          "ruleId": "C26495",
+          "message": {
+            "text": "'TimerEvent::n_id' 변수가 초기화되지 않았습니다. 항상 멤버 변수를 초기화하세요(type.6)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/Users/tlseh/Desktop/게임서버 포폴/GameServerRemake/2DRPG/Server/stdafx.h"
+                },
+                "region": {
+                  "startLine": 58,
+                  "startColumn": 2
+                }
+              },
+              "logicalLocations": [
+                {
+                  "fullyQualifiedName": "TimerEvent::{ctor}",
+                  "decoratedName": "??0TimerEvent@@QEAA@XZ",
+                  "kind": "function"
+                }
+              ]
+            }
+          ],
+          "properties": {
+            "targetSymbol": "TimerEvent::n_id"
+          }
+        },
+        {
+          "ruleId": "C26495",
+          "message": {
+            "text": "'TimerEvent::evtype' 변수가 초기화되지 않았습니다. 항상 멤버 변수를 초기화하세요(type.6)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/Users/tlseh/Desktop/게임서버 포폴/GameServerRemake/2DRPG/Server/stdafx.h"
+                },
+                "region": {
+                  "startLine": 58,
+                  "startColumn": 2
+                }
+              },
+              "logicalLocations": [
+                {
+                  "fullyQualifiedName": "TimerEvent::{ctor}",
+                  "decoratedName": "??0TimerEvent@@QEAA@XZ",
+                  "kind": "function"
+                }
+              ]
+            }
+          ],
+          "properties": {
+            "targetSymbol": "TimerEvent::evtype"
+          }
+        },
+        {
+          "ruleId": "C26495",
+          "message": {
+            "text": "'TimerEvent::n_id' 변수가 초기화되지 않았습니다. 항상 멤버 변수를 초기화하세요(type.6)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/Users/tlseh/Desktop/게임서버 포폴/GameServerRemake/2DRPG/Server/stdafx.h"
+                },
+                "region": {
+                  "startLine": 60,
+                  "startColumn": 2
+                }
+              },
+              "logicalLocations": [
+                {
+                  "fullyQualifiedName": "TimerEvent::{ctor}",
+                  "decoratedName": "??0TimerEvent@@QEAA@V?$time_point@Usystem_clock@chrono@std@@V?$duration@_JU?$ratio@$00$0JIJGIA@@std@@@23@@chrono@std@@HW4EVENT_TYPE@@@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ],
+          "properties": {
+            "targetSymbol": "TimerEvent::n_id"
+          }
+        },
+        {
+          "ruleId": "C6031",
+          "message": {
+            "text": "반환 값이 무시되었습니다. 'WSAStartup'."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/Users/tlseh/Desktop/게임서버 포폴/GameServerRemake/2DRPG/Server/Iocp.cpp"
+                },
+                "region": {
+                  "startLine": 11,
+                  "startColumn": 4,
+                  "endLine": 11,
+                  "endColumn": 32
+                }
+              },
+              "logicalLocations": [
+                {
+                  "fullyQualifiedName": "Iocp::{ctor}",
+                  "decoratedName": "??0Iocp@@QEAA@XZ",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26495",
+          "message": {
+            "text": "'Iocp::_clientsocket' 변수가 초기화되지 않았습니다. 항상 멤버 변수를 초기화하세요(type.6)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/Users/tlseh/Desktop/게임서버 포폴/GameServerRemake/2DRPG/Server/Iocp.cpp"
+                },
+                "region": {
+                  "startLine": 8,
+                  "startColumn": 7
+                }
+              },
+              "logicalLocations": [
+                {
+                  "fullyQualifiedName": "Iocp::{ctor}",
+                  "decoratedName": "??0Iocp@@QEAA@XZ",
+                  "kind": "function"
+                }
+              ]
+            }
+          ],
+          "properties": {
+            "targetSymbol": "Iocp::_clientsocket"
+          }
+        },
+        {
+          "ruleId": "C6387",
+          "message": {
+            "text": "'_Param_(7)'이(가) '0'일 수 있습니다.  이 경우 'AcceptEx' 함수의 사양과 일치하지 않습니다. "
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/Users/tlseh/Desktop/게임서버 포폴/GameServerRemake/2DRPG/Server/Iocp.cpp"
+                },
+                "region": {
+                  "startLine": 66,
+                  "startColumn": 7,
+                  "endLine": 66,
+                  "endColumn": 112
+                }
+              },
+              "logicalLocations": [
+                {
+                  "fullyQualifiedName": "Iocp::Run",
+                  "decoratedName": "?Run@Iocp@@QEAAXXZ",
+                  "kind": "function"
+                }
+              ]
+            }
+          ],
+          "codeFlows": [
+            {
+              "threadFlows": [
+                {
+                  "locations": [
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Users/tlseh/Desktop/게임서버 포폴/GameServerRemake/2DRPG/Server/Iocp.cpp"
+                          },
+                          "region": {
+                            "startLine": 53,
+                            "startColumn": 14
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Users/tlseh/Desktop/게임서버 포폴/GameServerRemake/2DRPG/Server/Iocp.cpp"
+                          },
+                          "region": {
+                            "startLine": 54,
+                            "startColumn": 6
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Users/tlseh/Desktop/게임서버 포폴/GameServerRemake/2DRPG/Server/Iocp.cpp"
+                          },
+                          "region": {
+                            "startLine": 56,
+                            "startColumn": 14
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Users/tlseh/Desktop/게임서버 포폴/GameServerRemake/2DRPG/Server/Iocp.cpp"
+                          },
+                          "region": {
+                            "startLine": 57,
+                            "startColumn": 24
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Users/tlseh/Desktop/게임서버 포폴/GameServerRemake/2DRPG/Server/Iocp.cpp"
+                          },
+                          "region": {
+                            "startLine": 59,
+                            "startColumn": 16
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Users/tlseh/Desktop/게임서버 포폴/GameServerRemake/2DRPG/Server/Iocp.cpp"
+                          },
+                          "region": {
+                            "startLine": 60,
+                            "startColumn": 9
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Users/tlseh/Desktop/게임서버 포폴/GameServerRemake/2DRPG/Server/Iocp.cpp"
+                          },
+                          "region": {
+                            "startLine": 61,
+                            "startColumn": 18
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Users/tlseh/Desktop/게임서버 포폴/GameServerRemake/2DRPG/Server/Iocp.cpp"
+                          },
+                          "region": {
+                            "startLine": 62,
+                            "startColumn": 17
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Users/tlseh/Desktop/게임서버 포폴/GameServerRemake/2DRPG/Server/Iocp.cpp"
+                          },
+                          "region": {
+                            "startLine": 63,
+                            "startColumn": 12
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Users/tlseh/Desktop/게임서버 포폴/GameServerRemake/2DRPG/Server/Iocp.cpp"
+                          },
+                          "region": {
+                            "startLine": 64,
+                            "startColumn": 14
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Users/tlseh/Desktop/게임서버 포폴/GameServerRemake/2DRPG/Server/Iocp.cpp"
+                          },
+                          "region": {
+                            "startLine": 66,
+                            "startColumn": 7
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C6387",
+          "message": {
+            "text": "'_Param_(7)'이(가) '0'일 수 있습니다.  이 경우 'AcceptEx' 함수의 사양과 일치하지 않습니다. "
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/Users/tlseh/Desktop/게임서버 포폴/GameServerRemake/2DRPG/Server/Iocp.cpp"
+                },
+                "region": {
+                  "startLine": 151,
+                  "startColumn": 4,
+                  "endLine": 151,
+                  "endColumn": 101
+                }
+              },
+              "logicalLocations": [
+                {
+                  "fullyQualifiedName": "Iocp::WorkerThread",
+                  "decoratedName": "?WorkerThread@Iocp@@QEAAXXZ",
+                  "kind": "function"
+                }
+              ]
+            }
+          ],
+          "codeFlows": [
+            {
+              "threadFlows": [
+                {
+                  "locations": [
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Users/tlseh/Desktop/게임서버 포폴/GameServerRemake/2DRPG/Server/Iocp.cpp"
+                          },
+                          "region": {
+                            "startLine": 94,
+                            "startColumn": 9
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Users/tlseh/Desktop/게임서버 포폴/GameServerRemake/2DRPG/Server/Iocp.cpp"
+                          },
+                          "region": {
+                            "startLine": 96,
+                            "startColumn": 9
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Users/tlseh/Desktop/게임서버 포폴/GameServerRemake/2DRPG/Server/Iocp.cpp"
+                          },
+                          "region": {
+                            "startLine": 97,
+                            "startColumn": 13
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Users/tlseh/Desktop/게임서버 포폴/GameServerRemake/2DRPG/Server/Iocp.cpp"
+                          },
+                          "region": {
+                            "startLine": 98,
+                            "startColumn": 18
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Users/tlseh/Desktop/게임서버 포폴/GameServerRemake/2DRPG/Server/Iocp.cpp"
+                          },
+                          "region": {
+                            "startLine": 99,
+                            "startColumn": 8
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Users/tlseh/Desktop/게임서버 포폴/GameServerRemake/2DRPG/Server/Iocp.cpp"
+                          },
+                          "region": {
+                            "startLine": 100,
+                            "startColumn": 18
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Users/tlseh/Desktop/게임서버 포폴/GameServerRemake/2DRPG/Server/Iocp.cpp"
+                          },
+                          "region": {
+                            "startLine": 102,
+                            "startColumn": 13
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Users/tlseh/Desktop/게임서버 포폴/GameServerRemake/2DRPG/Server/Iocp.cpp"
+                          },
+                          "region": {
+                            "startLine": 113,
+                            "startColumn": 24
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Users/tlseh/Desktop/게임서버 포폴/GameServerRemake/2DRPG/Server/Iocp.cpp"
+                          },
+                          "region": {
+                            "startLine": 119,
+                            "startColumn": 18
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Users/tlseh/Desktop/게임서버 포폴/GameServerRemake/2DRPG/Server/Iocp.cpp"
+                          },
+                          "region": {
+                            "startLine": 121,
+                            "startColumn": 3
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Users/tlseh/Desktop/게임서버 포폴/GameServerRemake/2DRPG/Server/Iocp.cpp"
+                          },
+                          "region": {
+                            "startLine": 122,
+                            "startColumn": 8
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Users/tlseh/Desktop/게임서버 포폴/GameServerRemake/2DRPG/Server/Iocp.cpp"
+                          },
+                          "region": {
+                            "startLine": 123,
+                            "startColumn": 18
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Users/tlseh/Desktop/게임서버 포폴/GameServerRemake/2DRPG/Server/Iocp.cpp"
+                          },
+                          "region": {
+                            "startLine": 148,
+                            "startColumn": 26
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Users/tlseh/Desktop/게임서버 포폴/GameServerRemake/2DRPG/Server/Iocp.cpp"
+                          },
+                          "region": {
+                            "startLine": 149,
+                            "startColumn": 4
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Users/tlseh/Desktop/게임서버 포폴/GameServerRemake/2DRPG/Server/Iocp.cpp"
+                          },
+                          "region": {
+                            "startLine": 150,
+                            "startColumn": 8
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Users/tlseh/Desktop/게임서버 포폴/GameServerRemake/2DRPG/Server/Iocp.cpp"
+                          },
+                          "region": {
+                            "startLine": 151,
+                            "startColumn": 12
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C6387",
+          "message": {
+            "text": "'_iocphandle'이(가) '0'일 수 있습니다.  이 경우 'GetQueuedCompletionStatus' 함수의 사양과 일치하지 않습니다. "
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/Users/tlseh/Desktop/게임서버 포폴/GameServerRemake/2DRPG/Server/Iocp.cpp"
+                },
+                "region": {
+                  "startLine": 99,
+                  "startColumn": 8,
+                  "endLine": 99,
+                  "endColumn": 78
+                }
+              },
+              "logicalLocations": [
+                {
+                  "fullyQualifiedName": "Iocp::WorkerThread",
+                  "decoratedName": "?WorkerThread@Iocp@@QEAAXXZ",
+                  "kind": "function"
+                }
+              ]
+            }
+          ],
+          "codeFlows": [
+            {
+              "threadFlows": [
+                {
+                  "locations": [
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Users/tlseh/Desktop/게임서버 포폴/GameServerRemake/2DRPG/Server/Iocp.cpp"
+                          },
+                          "region": {
+                            "startLine": 94,
+                            "startColumn": 9
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Users/tlseh/Desktop/게임서버 포폴/GameServerRemake/2DRPG/Server/Iocp.cpp"
+                          },
+                          "region": {
+                            "startLine": 96,
+                            "startColumn": 9
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Users/tlseh/Desktop/게임서버 포폴/GameServerRemake/2DRPG/Server/Iocp.cpp"
+                          },
+                          "region": {
+                            "startLine": 97,
+                            "startColumn": 13
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Users/tlseh/Desktop/게임서버 포폴/GameServerRemake/2DRPG/Server/Iocp.cpp"
+                          },
+                          "region": {
+                            "startLine": 98,
+                            "startColumn": 18
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Users/tlseh/Desktop/게임서버 포폴/GameServerRemake/2DRPG/Server/Iocp.cpp"
+                          },
+                          "region": {
+                            "startLine": 99,
+                            "startColumn": 8
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Users/tlseh/Desktop/게임서버 포폴/GameServerRemake/2DRPG/Server/Iocp.cpp"
+                          },
+                          "region": {
+                            "startLine": 100,
+                            "startColumn": 18
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Users/tlseh/Desktop/게임서버 포폴/GameServerRemake/2DRPG/Server/Iocp.cpp"
+                          },
+                          "region": {
+                            "startLine": 102,
+                            "startColumn": 13
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Users/tlseh/Desktop/게임서버 포폴/GameServerRemake/2DRPG/Server/Iocp.cpp"
+                          },
+                          "region": {
+                            "startLine": 113,
+                            "startColumn": 24
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Users/tlseh/Desktop/게임서버 포폴/GameServerRemake/2DRPG/Server/Iocp.cpp"
+                          },
+                          "region": {
+                            "startLine": 119,
+                            "startColumn": 18
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Users/tlseh/Desktop/게임서버 포폴/GameServerRemake/2DRPG/Server/Iocp.cpp"
+                          },
+                          "region": {
+                            "startLine": 121,
+                            "startColumn": 3
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Users/tlseh/Desktop/게임서버 포폴/GameServerRemake/2DRPG/Server/Iocp.cpp"
+                          },
+                          "region": {
+                            "startLine": 122,
+                            "startColumn": 8
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Users/tlseh/Desktop/게임서버 포폴/GameServerRemake/2DRPG/Server/Iocp.cpp"
+                          },
+                          "region": {
+                            "startLine": 123,
+                            "startColumn": 18
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Users/tlseh/Desktop/게임서버 포폴/GameServerRemake/2DRPG/Server/Iocp.cpp"
+                          },
+                          "region": {
+                            "startLine": 127,
+                            "startColumn": 23
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Users/tlseh/Desktop/게임서버 포폴/GameServerRemake/2DRPG/Server/Iocp.cpp"
+                          },
+                          "region": {
+                            "startLine": 128,
+                            "startColumn": 33
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Users/tlseh/Desktop/게임서버 포폴/GameServerRemake/2DRPG/Server/Iocp.cpp"
+                          },
+                          "region": {
+                            "startLine": 127,
+                            "startColumn": 25
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Users/tlseh/Desktop/게임서버 포폴/GameServerRemake/2DRPG/Server/Iocp.cpp"
+                          },
+                          "region": {
+                            "startLine": 130,
+                            "startColumn": 5
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Users/tlseh/Desktop/게임서버 포폴/GameServerRemake/2DRPG/Server/Iocp.cpp"
+                          },
+                          "region": {
+                            "startLine": 131,
+                            "startColumn": 32
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Users/tlseh/Desktop/게임서버 포폴/GameServerRemake/2DRPG/Server/Iocp.cpp"
+                          },
+                          "region": {
+                            "startLine": 132,
+                            "startColumn": 43
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Users/tlseh/Desktop/게임서버 포폴/GameServerRemake/2DRPG/Server/Iocp.cpp"
+                          },
+                          "region": {
+                            "startLine": 133,
+                            "startColumn": 43
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Users/tlseh/Desktop/게임서버 포폴/GameServerRemake/2DRPG/Server/Iocp.cpp"
+                          },
+                          "region": {
+                            "startLine": 134,
+                            "startColumn": 32
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Users/tlseh/Desktop/게임서버 포폴/GameServerRemake/2DRPG/Server/Iocp.cpp"
+                          },
+                          "region": {
+                            "startLine": 135,
+                            "startColumn": 32
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Users/tlseh/Desktop/게임서버 포폴/GameServerRemake/2DRPG/Server/Iocp.cpp"
+                          },
+                          "region": {
+                            "startLine": 136,
+                            "startColumn": 30
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Users/tlseh/Desktop/게임서버 포폴/GameServerRemake/2DRPG/Server/Iocp.cpp"
+                          },
+                          "region": {
+                            "startLine": 137,
+                            "startColumn": 34
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Users/tlseh/Desktop/게임서버 포폴/GameServerRemake/2DRPG/Server/Iocp.cpp"
+                          },
+                          "region": {
+                            "startLine": 138,
+                            "startColumn": 27
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Users/tlseh/Desktop/게임서버 포폴/GameServerRemake/2DRPG/Server/Iocp.cpp"
+                          },
+                          "region": {
+                            "startLine": 139,
+                            "startColumn": 21
+                          }
+                        },
+                        "message": {
+                          "text": "'_iocphandle'이(가) -1과(와) 같을 수 있습니다. (이 분기 시작)"
+                        }
+                      },
+                      "kinds": [
+                        "branch"
+                      ]
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Users/tlseh/Desktop/게임서버 포폴/GameServerRemake/2DRPG/Server/Iocp.cpp"
+                          },
+                          "region": {
+                            "startLine": 140,
+                            "startColumn": 31
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Users/tlseh/Desktop/게임서버 포폴/GameServerRemake/2DRPG/Server/Iocp.cpp"
+                          },
+                          "region": {
+                            "startLine": 94,
+                            "startColumn": 9
+                          }
+                        },
+                        "message": {
+                          "text": "이 루프 계속, ('1' 가정)"
+                        }
+                      },
+                      "kinds": [
+                        "branch"
+                      ]
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Users/tlseh/Desktop/게임서버 포폴/GameServerRemake/2DRPG/Server/Iocp.cpp"
+                          },
+                          "region": {
+                            "startLine": 96,
+                            "startColumn": 9
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Users/tlseh/Desktop/게임서버 포폴/GameServerRemake/2DRPG/Server/Iocp.cpp"
+                          },
+                          "region": {
+                            "startLine": 97,
+                            "startColumn": 13
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Users/tlseh/Desktop/게임서버 포폴/GameServerRemake/2DRPG/Server/Iocp.cpp"
+                          },
+                          "region": {
+                            "startLine": 98,
+                            "startColumn": 18
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Users/tlseh/Desktop/게임서버 포폴/GameServerRemake/2DRPG/Server/Iocp.cpp"
+                          },
+                          "region": {
+                            "startLine": 99,
+                            "startColumn": 8
+                          }
+                        },
+                        "message": {
+                          "text": "'_iocphandle'은(는) 'GetQueuedCompletionStatus'(c:\\program files (x86)\\windows kits\\10\\include\\10.0.26100.0\\um\\ioapiset.h:42에서 선언됨)에 대한 In/Out 인수입니다."
+                        }
+                      },
+                      "kinds": [
+                        "declaration"
+                      ]
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Users/tlseh/Desktop/게임서버 포폴/GameServerRemake/2DRPG/Server/Iocp.cpp"
+                          },
+                          "region": {
+                            "startLine": 99,
+                            "startColumn": 8
+                          }
+                        },
+                        "message": {
+                          "text": "'_iocphandle'은(는) NULL(이)면 안 됩니다. 이는 'GetQueuedCompletionStatus'의 SAL 주석과 일치하지 않습니다."
+                        }
+                      },
+                      "kinds": [
+                        "usage"
+                      ],
+                      "importance": "essential"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "tool": {
+        "driver": {
+          "name": "PREfast",
+          "fullName": "PREfast Code Analysis",
+          "version": "14.41.34120.0",
+          "informationUri": "https://aka.ms/cpp/ca"
+        }
+      },
+      "invocations": [
+        {
+          "executionSuccessful": true
+        }
+      ],
+      "artifacts": [
+        {
+          "location": {
+            "uri": "file:///C:/Users/tlseh/Desktop/게임서버 포폴/GameServerRemake/2DRPG/Server/stdafx.h"
+          },
+          "roles": [
+            "resultFile"
+          ],
+          "hashes": {
+            "sha-256": "e447df3d9d0ae9b13e85f6b5aafefcede673e35501a382a071abe9ab2a35db03"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///C:/Users/tlseh/Desktop/게임서버 포폴/GameServerRemake/2DRPG/Server/Iocp.cpp"
+          },
+          "roles": [
+            "analysisTarget",
+            "resultFile"
+          ],
+          "hashes": {
+            "sha-256": "6705963c3832da915fd63944c3bae59cd8ffaba60f43ce21516c444ee88b47ba"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///c:/users/tlseh/desktop/게임서버 포폴/gameserverremake/2drpg/server/iocp.h"
+          },
+          "hashes": {
+            "sha-256": "81b0edb74e8d382bc2c9ce1fd19bfe6077275c483ac58880e0c9dd03739147b1"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///c:/users/tlseh/desktop/게임서버 포폴/gameserverremake/2drpg/server/session.h"
+          },
+          "hashes": {
+            "sha-256": "db83bcc616f44e7606fab17520ae46f9ab8690d7dd5349c532179f40800c564b"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///c:/users/tlseh/desktop/게임서버 포폴/gameserverremake/2drpg/server/protocol.h"
+          },
+          "hashes": {
+            "sha-256": "24412006c2910085ee93578c386ad2a202d523c3913ebbcf89472dee9760f918"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///c:/users/tlseh/desktop/게임서버 포폴/gameserverremake/2drpg/server/timer.h"
+          },
+          "hashes": {
+            "sha-256": "1e2f2fba143f8d28b4be3fae1d7074f475f5e0f5f8e0d6838fd2af18b4aa9ab1"
+          }
+        }
+      ]
+    }
+  ]
+}
