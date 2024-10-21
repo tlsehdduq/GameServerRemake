@@ -24,7 +24,6 @@ public:
 	bool can_see(int from, int to, int type);
 
 public:
-	//virtual void move() = 0;
 	//virtual void attack() = 0;
 	void sendLoginPacket();
 	void sendAddPacket(const Session& client);
@@ -59,12 +58,13 @@ class Monster;
 class Player : public Session
 {
 public:
-	//void move() override;
+	void move(int dir);
 	//void attack() override;
 
 public:
-	void sendMonsterInit(Monster& monster);
+	void sendMonsterInit(int id);
 	void sendMonsterMove(Monster& monster);
+	void sendMonsterRemove(int id);
 
 private:
 };
@@ -74,7 +74,7 @@ class Monster : public Session
 public:
 	//void move() override;
 	//void attack() override;
-	void move( Player& client);
+	void move();
 	atomic_bool isalive = false;
 	mutex _lock;
 private:

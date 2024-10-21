@@ -142,7 +142,7 @@ void Session::sendRemovePacket(int id, int type)
 		_vl.unlock();
 		return;
 	}
-		_vl.unlock();
+	_vl.unlock();
 	SC_REMOVE_PACKET p;
 	p.size = sizeof(SC_REMOVE_PACKET);
 	p.type = SC_REMOVE;
@@ -152,20 +152,44 @@ void Session::sendRemovePacket(int id, int type)
 	doSend(&p);
 }
 
+void Player::move(int dir)
+{
+	switch (dir) {
+	case 0:
+		if (getPosy() <= 0) setPosy(0);
+		else
+			setPosy(getPosy() - 1);
+		break;
+	case 1:
+		if (getPosy() >= 1000)setPosy(1000);
+		else
+			setPosy(getPosy() + 1);
+		break;
+	case 2:
+		if (getPosx() <= 0)setPosx(0);
+		else
+			setPosx(getPosx() - 1);
+		break;
+	case 3:
+		if (getPosx() >= 1000)setPosx(1000);
+		else
+			setPosx(getPosx() + 1);
+		break;
+	}
+}
 
-
-void Player::sendMonsterInit(Monster& monster)
+void Player::sendMonsterInit(int id)
 {
 	SC_MONTSER_INIT_PACKET p;
 	p.size = sizeof(SC_MONTSER_INIT_PACKET);
 	p.type = SC_MONTSER_INIT;
-	p.x = monster.getPosx();
-	p.y = monster.getPosy();
-	p.id = monster.getId();
+	p.x = _npcs[id].getPosx();
+	p.y = _npcs[id].getPosy();
+	p.id = id;
 	doSend(&p);
 
 	_vl.lock();
-	monster_view_list.insert(monster.getId()); // 몬스터가 생길때 플레이어에게 몬스터의 정보를 저장 
+	monster_view_list.insert(id); // 몬스터가 생길때 플레이어에게 몬스터의 정보를 저장 
 	_vl.unlock();
 }
 
@@ -180,14 +204,27 @@ void Player::sendMonsterMove(Monster& monster)
 	doSend(&p);
 }
 
-void Monster::move(Player& client)
+void Player::sendMonsterRemove(int id)
+{
+	SC_MONSTER_REMOVE_PACKET p;
+	p.size = sizeof(SC_MONSTER_REMOVE_PACKET);
+	p.type = SC_MONSTER_REMOVE;
+	p.id = id;
+
+	doSend(&p);
+}
+
+void Monster::move()
 {
 	// move를 하는데 여기서 몬스터의 시야거리에 있는 플레이어들에게만 send를 해야함 viewlist 
 	unordered_set<int> _prevvl;
-	_vl.lock();
-	_prevvl = player_view_list;
-	_vl.unlock();
-
+	int myid = getId();
+	for (auto& pl : _clients)
+	{
+		if (pl._state != STATE::Ingame)continue;
+		if (pl.can_see(pl.getId(), myid, 2))
+			_prevvl.insert(pl.getId());
+	}
 	switch (rand() % 4)
 	{
 	case 0:
@@ -212,25 +249,30 @@ void Monster::move(Player& client)
 	for (auto& pl : _clients)
 	{
 		if (pl._state != STATE::Ingame)continue;
-		if (can_see(pl.getId(), getId(), 2) == true)
+		if (can_see(pl.getId(), myid, 2) == true)
 		{
 			_nearvl.insert(pl.getId());
 		}
 	}
-	for (auto& pl : _nearvl)
+	for (auto pl : _nearvl)
 	{
-		auto& cl = _clients[pl];
-		cl._vl.lock();
-		if (_npcs[getId()].player_view_list.count(pl))
-		{
-			cl._vl.unlock();
-			_clients[pl].sendMonsterMove(_npcs[getId()]);
-		}
+		if (_prevvl.count(pl) == 0)
+			_clients[pl].sendMonsterInit(myid);
 		else
+			_clients[pl].sendMonsterMove(_npcs[myid]);
+	}
+
+	for (auto pl : _prevvl)
+	{
+		if (_nearvl.count(pl) == 0)
 		{
-			cl._vl.unlock();
-			_clients[pl].sendMonsterInit(_npcs[getId()]);
+			_clients[pl]._vl.lock();
+			if (_clients[pl].monster_view_list.count(myid) == 0) {
+				_clients[pl]._vl.unlock();
+				_clients[pl].sendRemovePacket(myid, 2);
+			}
+			else
+				_clients[pl]._vl.unlock();
 		}
-		if (_prevvl.count(pl) == 0) {}
 	}
 }

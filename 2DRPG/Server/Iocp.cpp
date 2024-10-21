@@ -72,8 +72,6 @@ void Iocp::Run()
 			cout << err << "  - Error " << endl;
 		}
 	}
-	//_timer.setIocpHandle(&_iocphandle); // 여기가 문제인듯 싶다 
-
 	start_time = chrono::system_clock::now();
 	InitializedMonster();
 	int num_thread = thread::hardware_concurrency();
@@ -186,10 +184,10 @@ void Iocp::WorkerThread()
 					break;
 				}
 			}
-			if (keepalive) { // 이미 시야거리에 들어와있음 can_see를 또할필요가? X 
+			if (keepalive) { // 이미 시야거리에 들어와있음 can_see를 또할필요가? 
 				int c_id = static_cast<int>(key);
 				// 몬스터의 시야거리에 플레이어가 있다면 ? move 
-				_npcs[over_ex->target_id].move(_clients[c_id]);
+				_npcs[over_ex->target_id].move();
 				TimerEvent ev{ std::chrono::system_clock::now() + std::chrono::seconds(1s),over_ex->target_id,c_id,EVENT_TYPE::EV_NPC_MOVE };
 				_timer.InitTimerQueue(ev);
 			}
@@ -236,7 +234,7 @@ void Iocp::ProcessPacket(int id, char* packet)
 		{
 			if (npc.isalive == false)continue;
 			if (_clients[id].can_see(id, npc.getId(), 2)) {
-				_clients[id].sendMonsterInit(npc); // NPC의 모든 정보들을 전송? 시야거리에 있는 애들만 전송 
+				_clients[id].sendMonsterInit(npc.getId()); // NPC의 모든 정보들을 전송? 시야거리에 있는 애들만 전송 
 				NpcMoveOn(npc.getId(), id); // NPC 타이머 작동 
 			}
 		}
@@ -253,23 +251,8 @@ void Iocp::ProcessPacket(int id, char* packet)
 	case CS_MOVE_PLAYER: {
 		CS_MOVE_PLAYER_PACKET* p = reinterpret_cast<CS_MOVE_PLAYER_PACKET*>(packet);
 		_clients[id].setMoveTime(p->move_time);
-		switch (p->dir) {
-		case 0:
-			if (_clients[id].getPosy() <= 0) _clients[id].setPosy(0);
-			else
-				_clients[id].setPosy(_clients[id].getPosy() - 1);
-			break;
-		case 1:
-			_clients[id].setPosy(_clients[id].getPosy() + 1);
-			break;
-		case 2:
-			_clients[id].setPosx(_clients[id].getPosx() - 1);
+		_clients[id].move(p->dir);
 
-			break;
-		case 3:
-			_clients[id].setPosx(_clients[id].getPosx() + 1);
-			break;
-		}
 		unordered_set<int> nearvlist;
 		_clients[id]._vl.lock();
 		unordered_set<int> oldvlist = _clients[id].player_view_list;
@@ -281,9 +264,7 @@ void Iocp::ProcessPacket(int id, char* packet)
 			if (pl.getId() == id)continue;
 			if (_clients[id].can_see(id, pl.getId(), 1)) // 1 : client client 2 : client monster
 				nearvlist.insert(pl.getId());
-			//pl.sendMoverPlayerPacket(_clients[id]);
 		}
-
 		_clients[id].sendMoverPlayerPacket(_clients[id]); // 나한테 내가 움직인걸 보낸다 .
 
 		for (auto& pl : nearvlist)
@@ -300,7 +281,7 @@ void Iocp::ProcessPacket(int id, char* packet)
 				_clients[pl].sendAddPacket(_clients[id]);
 			}
 			if (oldvlist.count(pl) == 0)
-				_clients[id].sendAddPacket(_clients[pl]);
+				_clients[id].sendAddPacket(_clients[pl]);//  ? 
 		}
 		for (auto& pl : oldvlist)
 		{
@@ -310,22 +291,37 @@ void Iocp::ProcessPacket(int id, char* packet)
 				_clients[pl].sendRemovePacket(id, 1);
 			}
 		}
+		// --------------------------------npc viewlist--------------------------------------------
+
+		unordered_set<int> nearvnpclist;
+		_clients[id]._vl.lock();
+		unordered_set<int> oldvnpclist = _clients[id].monster_view_list;
+		_clients[id]._vl.unlock();
+
 		for (auto& npc : _npcs)
 		{
-			if (_clients[id].can_see(id, npc.getId(), 2)) {
-				if (_clients[id].monster_view_list.count(npc.getId()) != 0) // 이미 뷰리스트에 올라와있다면? move 
-					NpcMoveOn(npc.getId(), id);
-				else
-					//시야거리에 들어왔는데 뷰리스트에 없다? 그렇다면 일단 add 먼저 
-					_clients[id].sendMonsterInit(npc);
+			if (_clients[id].can_see(id, npc.getId(), 2) == true)
+			{
+				nearvnpclist.insert(npc.getId());
+			}
+		}
+		for (auto npcid : nearvnpclist)
+		{
+			if (_clients[id].monster_view_list.count(_npcs[npcid].getId() != 0)) // 이미 내 viewlist에 몬스터가 있다면? 행동 
+			{
+				NpcMoveOn(npcid, id);
 			}
 			else
+				_clients[id].sendMonsterInit(npcid); // 없다면 추가부터 
+			if (oldvnpclist.count(npcid) == 0)
+				_clients[id].sendMonsterInit(npcid); // 없다면 추가부터 
+		}
+		for (auto npcid : oldvnpclist)
+		{
+			if (nearvnpclist.count(npcid) == 0)
 			{
-				if (_clients[id].monster_view_list.count(npc.getId()) != 0) // 이미 뷰리스트에 올라와있다면? move 
-				{
-				_clients[id].monster_view_list.erase(npc.getId());
-				npc.isalive = false;
-				}
+				_clients[id].sendMonsterRemove(npcid);
+				_clients[id].monster_view_list.erase(npcid);
 			}
 		}
 	}
