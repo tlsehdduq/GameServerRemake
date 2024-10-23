@@ -221,7 +221,7 @@ void Monster::move()
 	int myid = getId();
 	for (auto& pl : _clients)
 	{
-		if (pl._state != STATE::Ingame)continue;
+		if (pl._state != STATE::Ingame)continue; //움직이기 이전 주변애들 파악 
 		if (pl.can_see(pl.getId(), myid, 2))
 			_prevvl.insert(pl.getId());
 	}

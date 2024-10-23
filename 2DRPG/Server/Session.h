@@ -48,7 +48,7 @@ public:
 	STATE _state;
 	mutex _s_lock;
 	int _prevremain;
-	int _viewrange = 10;
+	int _viewrange = 5;
 	unordered_set <int> player_view_list;
 	unordered_set <int> monster_view_list;
 	mutex _vl;

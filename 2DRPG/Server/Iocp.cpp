@@ -178,13 +178,13 @@ void Iocp::WorkerThread()
 			for (int j = 0; j < MAX_USER; ++j)
 			{
 				if (_clients[j]._state != STATE::Ingame)continue;
-				if (_clients[j].can_see(j, over_ex->target_id, 2)) // NPC와 클라 사정거리 안에 ? 
+				if (_clients[j].can_see(j, over_ex->target_id, 2)) //시야거리에?  
 				{
 					keepalive = true;
 					break;
 				}
 			}
-			if (keepalive) { // 이미 시야거리에 들어와있음 can_see를 또할필요가? 
+			if (keepalive) { 
 				int c_id = static_cast<int>(key);
 				// 몬스터의 시야거리에 플레이어가 있다면 ? move 
 				_npcs[over_ex->target_id].move();
@@ -232,7 +232,6 @@ void Iocp::ProcessPacket(int id, char* packet)
 		// 이것도 수정 
 		for (auto& npc : _npcs)
 		{
-			if (npc.isalive == false)continue;
 			if (_clients[id].can_see(id, npc.getId(), 2)) {
 				_clients[id].sendMonsterInit(npc.getId()); // NPC의 모든 정보들을 전송? 시야거리에 있는 애들만 전송 
 				NpcMoveOn(npc.getId(), id); // NPC 타이머 작동 
@@ -260,6 +259,7 @@ void Iocp::ProcessPacket(int id, char* packet)
 
 		for (auto& pl : _clients)
 		{
+			if (pl.getId() == -1)break;
 			if (pl._state != STATE::Ingame)continue;
 			if (pl.getId() == id)continue;
 			if (_clients[id].can_see(id, pl.getId(), 1)) // 1 : client client 2 : client monster
@@ -307,7 +307,7 @@ void Iocp::ProcessPacket(int id, char* packet)
 		}
 		for (auto npcid : nearvnpclist)
 		{
-			if (_clients[id].monster_view_list.count(_npcs[npcid].getId() != 0)) // 이미 내 viewlist에 몬스터가 있다면? 행동 
+			if (_clients[id].monster_view_list.count(npcid) != 0) // 이미 내 viewlist에 몬스터가 있다면? 행동 
 			{
 				NpcMoveOn(npcid, id);
 			}
@@ -320,15 +320,13 @@ void Iocp::ProcessPacket(int id, char* packet)
 		{
 			if (nearvnpclist.count(npcid) == 0)
 			{
+				_npcs[npcid].isalive = false;
 				_clients[id].sendMonsterRemove(npcid);
 				_clients[id].monster_view_list.erase(npcid);
 			}
 		}
 	}
 					   break;
-
-
-
 	}
 }
 
