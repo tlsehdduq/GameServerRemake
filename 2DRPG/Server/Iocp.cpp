@@ -184,10 +184,10 @@ void Iocp::WorkerThread()
 					break;
 				}
 			}
-			if (keepalive) { 
+			if (keepalive) {
 				int c_id = static_cast<int>(key);
 				// 몬스터의 시야거리에 플레이어가 있다면 ? move 
-				_npcs[over_ex->target_id].move();
+				//_npcs[over_ex->target_id].move();
 				TimerEvent ev{ std::chrono::system_clock::now() + std::chrono::seconds(1s),over_ex->target_id,c_id,EVENT_TYPE::EV_NPC_MOVE };
 				_timer.InitTimerQueue(ev);
 			}
@@ -195,6 +195,15 @@ void Iocp::WorkerThread()
 			delete over_ex;
 			break;
 		}
+		case COMP_TYPE::END_ATTACK: {
+			for (auto& pl : _clients)
+			{
+				if (pl.getId() == key) continue;
+				pl.sendAttack(key, false);
+			}
+			delete over_ex;
+		}
+								  break;
 		default:
 			break;
 		}
@@ -213,8 +222,8 @@ void Iocp::ProcessPacket(int id, char* packet)
 		{
 			lock_guard<mutex>ll{ _clients[id]._s_lock };
 			_clients[id]._state = STATE::Ingame;
-			_clients[id].setPosx(rand() % W_WIDTH);
-			_clients[id].setPosy(rand() % W_HEIGHT);
+			_clients[id].setPosx(rand() % 40);
+			_clients[id].setPosy(rand() % 40);
 		}
 		// 다시 보내야함 
 		_clients[id].sendLoginPacket();
@@ -240,7 +249,15 @@ void Iocp::ProcessPacket(int id, char* packet)
 	}
 				 break;
 	case CS_ATTACK: {
-
+		_clients[id].attack();
+		for (auto& pl : _clients)
+		{
+			if (pl.getId() == -1)break;
+			if (pl.getId() == id)continue;
+			pl.sendAttack(id,true);
+			TimerEvent ev{ std::chrono::system_clock::now() + std::chrono::milliseconds(100ms),id,EVENT_TYPE::EV_ATTACK};
+			_timer.InitTimerQueue(ev);
+		}
 	}
 				  break;
 	case CS_CHAT: {
@@ -251,6 +268,10 @@ void Iocp::ProcessPacket(int id, char* packet)
 		CS_MOVE_PLAYER_PACKET* p = reinterpret_cast<CS_MOVE_PLAYER_PACKET*>(packet);
 		_clients[id].setMoveTime(p->move_time);
 		_clients[id].move(p->dir);
+		if (p->dir == 2)
+			_clients[id]._leftright = true;
+		else if (p->dir == 3)
+			_clients[id]._leftright = false;
 
 		unordered_set<int> nearvlist;
 		_clients[id]._vl.lock();
@@ -347,12 +368,14 @@ int Iocp::CreateId()
 void Iocp::InitializedMonster() // 몬스터 랜덤 좌표지정 
 {
 	default_random_engine dre;
-	uniform_int_distribution<int> uid{ 0, 1000 };
+	uniform_int_distribution<int> uid{ 0, 10 };
 
 	for (int i = 0; i < MAX_NPC; ++i)
 	{
-		_npcs[i].setPosx(uid(dre));
-		_npcs[i].setPosy(uid(dre));
+		_npcs[i].setPosx(3);
+		//_npcs[i].setPosx(uid(dre));
+		_npcs[i].setPosy(2);
+		//_npcs[i].setPosy(uid(dre));
 		_npcs[i].setId(i);
 	}
 

@@ -49,9 +49,13 @@ public:
 	mutex _s_lock;
 	int _prevremain;
 	int _viewrange = 5;
+	int _dir = 0;
+	bool _leftright = false;
 	unordered_set <int> player_view_list;
 	unordered_set <int> monster_view_list;
 	mutex _vl;
+
+	
 
 };
 class Monster;
@@ -59,14 +63,18 @@ class Player : public Session
 {
 public:
 	void move(int dir);
+	void attack();
+	bool canatt(int from, int to);
 	//void attack() override;
 
 public:
 	void sendMonsterInit(int id);
 	void sendMonsterMove(Monster& monster);
 	void sendMonsterRemove(int id);
-
+	void sendAttack(int id,bool onoff);
 private:
+	int _attrange = 1;
+
 };
 
 class Monster : public Session

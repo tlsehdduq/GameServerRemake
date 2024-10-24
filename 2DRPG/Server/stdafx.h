@@ -17,7 +17,7 @@
 using namespace std;
 
 // Overlapped	
-enum class COMP_TYPE : char { Accept, Recv, Send, NPC_UPDATE, NPC_INITIALIZED };
+enum class COMP_TYPE : char { Accept, Recv, Send, NPC_UPDATE, NPC_INITIALIZED, END_ATTACK };
 enum class EVENT_TYPE : char { EV_INIT,EV_ATTACK,EV_NPC_MOVE };
  //Overlapped	
 class OVERLAPPED_EX

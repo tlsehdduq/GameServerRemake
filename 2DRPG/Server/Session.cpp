@@ -130,6 +130,7 @@ void Session::sendMoverPlayerPacket(const Session& client)
 	p.x = client._x;
 	p.y = client._y;
 	p.move_time = client._last_move_time;
+	p.left = client._leftright;
 	doSend(&p);
 }
 
@@ -154,6 +155,8 @@ void Session::sendRemovePacket(int id, int type)
 
 void Player::move(int dir)
 {
+	_dir = dir;
+
 	switch (dir) {
 	case 0:
 		if (getPosy() <= 0) setPosy(0);
@@ -176,6 +179,41 @@ void Player::move(int dir)
 			setPosx(getPosx() + 1);
 		break;
 	}
+}
+
+void Player::attack()
+{
+	for (auto& npc : monster_view_list)
+	{
+			//양옆에 있음 , 
+		switch (_dir) {
+		case 2: // 왼쪽을 바라보고 있을 때 
+		{
+			if (canatt(getId(), npc) && getPosx() - _npcs[npc].getPosx() >= 0)
+			{
+				cout << npc << "  우측 에서 몬스터 공격 " << endl;
+			}
+		}break;
+		case 3: // 오른쪽을 바라보고 있을 떄
+		{
+			if (canatt(getId(), npc) && getPosx() - _npcs[npc].getPosx() <= 0)
+			{
+				cout << npc << "  좌측  에서 몬스터 공격 " << endl;
+			}
+		}break;
+		}
+	}
+}
+
+bool Player::canatt(int from, int to)
+{
+	if (_clients[from].getPosy() == _npcs[to].getPosy()) {
+		// 공격은 양옆으로만 y값은 같아야함 
+		if (abs(_clients[from].getPosx() - _npcs[to].getPosx()) != 1)return false;
+		return true;
+	}
+	else return false;
+
 }
 
 void Player::sendMonsterInit(int id)
@@ -211,6 +249,16 @@ void Player::sendMonsterRemove(int id)
 	p.type = SC_MONSTER_REMOVE;
 	p.id = id;
 
+	doSend(&p);
+}
+
+void Player::sendAttack(int id, bool onoff)
+{
+	SC_PLAYER_ATTACK_PACKET p;
+	p.size = sizeof(SC_PLAYER_ATTACK_PACKET);
+	p.type = SC_PLAYER_ATTACK;
+	p.id = id;
+	p.onoff = onoff;
 	doSend(&p);
 }
 

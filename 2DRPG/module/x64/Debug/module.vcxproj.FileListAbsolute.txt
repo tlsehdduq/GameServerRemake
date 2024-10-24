@@ -1,0 +1,2 @@
+D:\ProjectSDY\게임서버 과제6 NPC최적화\module\x64\Debug\module.exe
+C:\Users\tlseh\Desktop\게임서버텀프\FinalProject\module\x64\Debug\module.exe

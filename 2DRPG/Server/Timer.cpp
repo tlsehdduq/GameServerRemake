@@ -45,6 +45,15 @@ void Timer::TimerThread()
 					}
 				}
 											break;
+				case EVENT_TYPE::EV_ATTACK: {
+					OVERLAPPED_EX* ov = new OVERLAPPED_EX;
+					ov->_type = COMP_TYPE::END_ATTACK;
+					if (PostQueuedCompletionStatus(_iocphandle, 1, ev.c_id, &ov->_over) == FALSE)
+					{
+						std::cerr << "Failed to post to IOCP: " << GetLastError() << std::endl;
+					}
+				}
+					break;
 				}
 			}continue;
 		}
