@@ -2,8 +2,6 @@
 #include"Session.h"
 #include"Timer.h"
 
-
-
 class Iocp
 {
 public:

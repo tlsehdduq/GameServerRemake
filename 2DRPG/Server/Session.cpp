@@ -32,6 +32,11 @@ int Session::getMoveTime()
 	return _last_move_time;
 }
 
+int Session::getHp()
+{
+	return _hp;
+}
+
 void Session::setPosx(short x)
 {
 	_x = x;
@@ -60,6 +65,11 @@ void Session::setName(char* name)
 void Session::setMoveTime(int time)
 {
 	_last_move_time = time;
+}
+
+void Session::setHp(int hp)
+{
+	_hp = hp;
 }
 
 void Session::doRecv()
@@ -136,14 +146,14 @@ void Session::sendMoverPlayerPacket(const Session& client)
 
 void Session::sendRemovePacket(int id, int type)
 {
-	_vl.lock();
-	if (player_view_list.count(id))
-		player_view_list.erase(id);
-	else {
-		_vl.unlock();
-		return;
-	}
-	_vl.unlock();
+	//_vl.lock();
+	//if (player_view_list.count(id))
+	//	player_view_list.erase(id);
+	//else {
+	//	_vl.unlock();
+	//	return;
+	//}
+	//_vl.unlock();
 	SC_REMOVE_PACKET p;
 	p.size = sizeof(SC_REMOVE_PACKET);
 	p.type = SC_REMOVE;
@@ -185,13 +195,19 @@ void Player::attack()
 {
 	for (auto& npc : monster_view_list)
 	{
-			//양옆에 있음 , 
+		//양옆에 있음 , 
 		switch (_dir) {
 		case 2: // 왼쪽을 바라보고 있을 때 
 		{
 			if (canatt(getId(), npc) && getPosx() - _npcs[npc].getPosx() >= 0)
 			{
 				cout << npc << "  우측 에서 몬스터 공격 " << endl;
+				_npcs[npc].setHp(_npcs[npc].getHp() - 10);
+				if (_npcs[npc].getHp() <= 0)
+				{
+					_npcs[npc].isalive = false;
+					sendRemovePacket(npc, 2);
+				}
 			}
 		}break;
 		case 3: // 오른쪽을 바라보고 있을 떄
@@ -199,6 +215,12 @@ void Player::attack()
 			if (canatt(getId(), npc) && getPosx() - _npcs[npc].getPosx() <= 0)
 			{
 				cout << npc << "  좌측  에서 몬스터 공격 " << endl;
+				_npcs[npc].setHp(_npcs[npc].getHp() - 10);
+				if (_npcs[npc].getHp() <= 0)
+				{
+					_npcs[npc].isalive = false;
+					sendRemovePacket(npc, 2);
+				}
 			}
 		}break;
 		}
@@ -265,33 +287,41 @@ void Player::sendAttack(int id, bool onoff)
 void Monster::move()
 {
 	// move를 하는데 여기서 몬스터의 시야거리에 있는 플레이어들에게만 send를 해야함 viewlist 
+	// 시야거리에 있다면? 플레이어를 추격해야함 
 	unordered_set<int> _prevvl;
 	int myid = getId();
+	int traceclid = -1;
 	for (auto& pl : _clients)
 	{
 		if (pl._state != STATE::Ingame)continue; //움직이기 이전 주변애들 파악 
 		if (pl.can_see(pl.getId(), myid, 2))
+		{
 			_prevvl.insert(pl.getId());
+			traceclid = pl.getId();
+		}
 	}
-	switch (rand() % 4)
-	{
-	case 0:
-		if (getPosx() < 0 || getPosx() > 500)break;
-		setPosx(getPosx() + 1);
-		break;
-	case 1:
-		if (getPosx() < 0 || getPosx() > 500)break;
-		setPosx(getPosx() - 1);
-		break;
-	case 2:
-		if (getPosy() < 0 || getPosy() > 500)break;
-		setPosy(getPosy() + 1);
-		break;
-	case 3:
-		if (getPosy() < 0 || getPosy() > 500)break;
-		setPosy(getPosy() - 1);
-		break;
-	}// 몬스터 이동 
+
+	//switch (rand() % 4)
+	//{
+	//case 0:
+	//	if (getPosx() < 0 || getPosx() > 500)break;
+	//	setPosx(getPosx() + 1);
+	//	break;
+	//case 1:
+	//	if (getPosx() < 0 || getPosx() > 500)break;
+	//	setPosx(getPosx() - 1);
+	//	break;
+	//case 2:
+	//	if (getPosy() < 0 || getPosy() > 500)break;
+	//	setPosy(getPosy() + 1);
+	//	break;
+	//case 3:
+	//	if (getPosy() < 0 || getPosy() > 500)break;
+	//	setPosy(getPosy() - 1);
+	//	break;
+	//}// 몬스터 이동 
+
+	moveTowardsPlayer(_clients[traceclid].getPosx(), _clients[traceclid].getPosy());
 
 	unordered_set<int> _nearvl;
 	for (auto& pl : _clients)
@@ -324,3 +354,17 @@ void Monster::move()
 		}
 	}
 }
+
+void Monster::moveTowardsPlayer(short playerx, short playery)
+{
+	Astar pathfinder;
+	std::vector<AstarNode> path = pathfinder.findpath(map, _x, _y, playerx, playery);
+
+	if (!path.empty()) {
+		AstarNode nextStep = path.front(); // 다음 이동할 위치
+		setPosx(nextStep._x);
+		setPosy(nextStep._y);
+		// 이동 후 상태 업데이트
+	}
+}
+

@@ -1,5 +1,6 @@
 #pragma once
 #include"protocol.h"
+#include"Astar.h"
 enum class STATE : unsigned int { Free, Alloc, Ingame, Start };
 class Session
 {
@@ -10,6 +11,7 @@ public:
 	SOCKET getSocket();
 	char* getName();
 	int getMoveTime();
+	int getHp();
 
 	void setPosx(short x);
 	void setPosy(short y);
@@ -17,6 +19,7 @@ public:
 	void setSocket(SOCKET socket);
 	void setName(char* name);
 	void setMoveTime(int time);
+	void setHp(int hp);
 
 	void doRecv();
 	void doSend(void* packet);
@@ -30,7 +33,7 @@ public:
 	void sendMoverPlayerPacket(const Session& client);
 	void sendRemovePacket(int id,int type);
 
-private:
+protected:
 	OVERLAPPED_EX _s_over;
 	short _x;
 	short _y;
@@ -80,11 +83,17 @@ private:
 class Monster : public Session
 {
 public:
-	//void move() override;
-	//void attack() override;
 	void move();
+	void moveTowardsPlayer(short playerx, short playery);
+	
 	atomic_bool isalive = false;
 	mutex _lock;
+
 private:
+	// 길찾기 알고리즘 
+	int map[MAPSIZE][MAPSIZE] = { 0 };
+	bool closedList[MAPSIZE][MAPSIZE];
+	int cost[MAPSIZE][MAPSIZE];
 };
+
 

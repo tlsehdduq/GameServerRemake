@@ -7,8 +7,9 @@ constexpr int CHAT_SIZE = 100;
 constexpr int MAX_USER = 10000;
 constexpr int MAX_NPC = 1;
 
-constexpr int W_WIDTH = 1000;
-constexpr int W_HEIGHT = 1000;
+constexpr int MAPSIZE = 10;
+constexpr int W_WIDTH = 10;
+constexpr int W_HEIGHT = 10;
 
 constexpr char CS_LOGIN = 0;
 constexpr char CS_MOVE_PLAYER = 1;
@@ -139,3 +140,4 @@ struct SC_PLAYER_ATTACK_PACKET {
 	int id;
 	bool onoff;
 };
+

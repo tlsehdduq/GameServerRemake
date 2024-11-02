@@ -346,12 +346,20 @@ void ProcessPacket(char* ptr)
 	case SC_REMOVE:
 	{
 		SC_REMOVE_PACKET* my_packet = reinterpret_cast<SC_REMOVE_PACKET*>(ptr);
+		
 		int other_id = my_packet->id;
+		if (my_packet->sessiontype == 1) {
+
 		if (other_id == g_myid) {
 			avatar.hide();
 		}
 		else {
 			players.erase(other_id);
+		}
+		}
+		else {
+			monsters[other_id].hide();
+			monsters.erase(other_id);
 		}
 		break;
 	}

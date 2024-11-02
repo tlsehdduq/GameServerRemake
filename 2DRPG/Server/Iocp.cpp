@@ -124,9 +124,7 @@ void Iocp::WorkerThread()
 				{
 					lock_guard<mutex>ll(_clients[client_id]._s_lock);
 					_clients[client_id]._state = STATE::Alloc;
-
 				}
-
 				_clients[client_id].setPosx(0);
 				_clients[client_id].setPosy(0);
 				_clients[client_id].setId(client_id);
@@ -178,7 +176,7 @@ void Iocp::WorkerThread()
 			for (int j = 0; j < MAX_USER; ++j)
 			{
 				if (_clients[j]._state != STATE::Ingame)continue;
-				if (_clients[j].can_see(j, over_ex->target_id, 2)) //시야거리에?  
+				if (_clients[j].can_see(j, over_ex->target_id, 2)) //시야 거리에?  
 				{
 					keepalive = true;
 					break;
@@ -187,7 +185,8 @@ void Iocp::WorkerThread()
 			if (keepalive) {
 				int c_id = static_cast<int>(key);
 				// 몬스터의 시야거리에 플레이어가 있다면 ? move 
-				//_npcs[over_ex->target_id].move();
+				_npcs[over_ex->target_id].move();
+				//_npcs[over_ex->target_id].moveTowardsPlayer(_clients[key].getPosx(),_clients[key].getPosy());
 				TimerEvent ev{ std::chrono::system_clock::now() + std::chrono::seconds(1s),over_ex->target_id,c_id,EVENT_TYPE::EV_NPC_MOVE };
 				_timer.InitTimerQueue(ev);
 			}
@@ -222,8 +221,8 @@ void Iocp::ProcessPacket(int id, char* packet)
 		{
 			lock_guard<mutex>ll{ _clients[id]._s_lock };
 			_clients[id]._state = STATE::Ingame;
-			_clients[id].setPosx(rand() % 40);
-			_clients[id].setPosy(rand() % 40);
+			_clients[id].setPosx(5);
+			_clients[id].setPosy(5);
 		}
 		// 다시 보내야함 
 		_clients[id].sendLoginPacket();
@@ -377,6 +376,7 @@ void Iocp::InitializedMonster() // 몬스터 랜덤 좌표지정
 		_npcs[i].setPosy(2);
 		//_npcs[i].setPosy(uid(dre));
 		_npcs[i].setId(i);
+		_npcs[i].setHp(100);
 	}
 
 	// 여기서 몬스터 정보 전송? 
@@ -385,6 +385,7 @@ void Iocp::InitializedMonster() // 몬스터 랜덤 좌표지정
 
 void Iocp::NpcMoveOn(int npcid, int id)
 {
+	if (_npcs[npcid].getHp() <= 0)return;
 	bool old_state = false;
 	if (false == atomic_compare_exchange_strong(&_npcs[npcid].isalive, &old_state, true))return;
 
