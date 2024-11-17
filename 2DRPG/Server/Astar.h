@@ -24,9 +24,9 @@ class Astar
 {
 private:
 	int calculateH(short fromX, short fromY, short toX, short toY);
-	bool isValid(int map[10][10], int x, int y, bool closedList[10][10]); // 유효성 검사 함수 추가
+	bool isValid(int map[1000][1000], int x, int y, bool closedList[1000][1000]); // 유효성 검사 함수 추가
 
 public:
-	vector<AstarNode>findpath(int map[10][10], short startx, short starty, short goalx, short goaly);
-
+	vector<AstarNode>findpath(int map[1000][1000], short startx, short starty, short goalx, short goaly);
+	mutex closedListMutex;
 };

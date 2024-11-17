@@ -192,8 +192,9 @@ void Iocp::WorkerThread()
 			}
 
 			delete over_ex;
-			break;
 		}
+			break;
+
 		case COMP_TYPE::END_ATTACK: {
 			for (auto& pl : _clients)
 			{
@@ -217,12 +218,14 @@ void Iocp::ProcessPacket(int id, char* packet)
 	case CS_LOGIN: {
 		CS_LOGIN_PACKET* p = reinterpret_cast<CS_LOGIN_PACKET*>(packet);
 		//_clients[id].setId(p->id);
+		short r_x = rand() % 1000;
+		short r_y = rand() % 1000;
 		_clients[id].setName(p->name);
 		{
 			lock_guard<mutex>ll{ _clients[id]._s_lock };
 			_clients[id]._state = STATE::Ingame;
-			_clients[id].setPosx(5);
-			_clients[id].setPosy(5);
+			_clients[id].setPosx(r_x);
+			_clients[id].setPosy(r_y);
 		}
 		// 다시 보내야함 
 		_clients[id].sendLoginPacket();
@@ -240,6 +243,7 @@ void Iocp::ProcessPacket(int id, char* packet)
 		// 이것도 수정 
 		for (auto& npc : _npcs)
 		{
+			if (npc.isalive == false)continue;
 			if (_clients[id].can_see(id, npc.getId(), 2)) {
 				_clients[id].sendMonsterInit(npc.getId()); // NPC의 모든 정보들을 전송? 시야거리에 있는 애들만 전송 
 				NpcMoveOn(npc.getId(), id); // NPC 타이머 작동 
@@ -367,14 +371,14 @@ int Iocp::CreateId()
 void Iocp::InitializedMonster() // 몬스터 랜덤 좌표지정 
 {
 	default_random_engine dre;
-	uniform_int_distribution<int> uid{ 0, 10 };
+	uniform_int_distribution<int> uid{ 0, 1000 };
 
 	for (int i = 0; i < MAX_NPC; ++i)
 	{
-		_npcs[i].setPosx(3);
-		//_npcs[i].setPosx(uid(dre));
-		_npcs[i].setPosy(2);
-		//_npcs[i].setPosy(uid(dre));
+		//_npcs[i].setPosx(3);
+		_npcs[i].setPosx(uid(dre));
+		//_npcs[i].setPosy(2);
+		_npcs[i].setPosy(uid(dre));
 		_npcs[i].setId(i);
 		_npcs[i].setHp(100);
 	}

@@ -2,6 +2,11 @@
 #include "Session.h"
 extern array<Player, MAX_USER> _clients;
 extern array<Monster, MAX_NPC> _npcs;
+
+int Monster::_map[MAPSIZE][MAPSIZE] = { 0 };
+bool Monster::_closedList[MAPSIZE][MAPSIZE] = { false };
+int Monster::_cost[MAPSIZE][MAPSIZE] = { 0 };
+
 short Session::getPosx()
 {
 	return _x;
@@ -284,13 +289,18 @@ void Player::sendAttack(int id, bool onoff)
 	doSend(&p);
 }
 
+Monster::Monster()
+{
+	
+}
+
 void Monster::move()
 {
 	// move를 하는데 여기서 몬스터의 시야거리에 있는 플레이어들에게만 send를 해야함 viewlist 
 	// 시야거리에 있다면? 플레이어를 추격해야함 
 	unordered_set<int> _prevvl;
 	int myid = getId();
-	int traceclid = -1;
+	int traceclid = -1; // 추격 ID 
 	for (auto& pl : _clients)
 	{
 		if (pl._state != STATE::Ingame)continue; //움직이기 이전 주변애들 파악 
@@ -300,29 +310,8 @@ void Monster::move()
 			traceclid = pl.getId();
 		}
 	}
-
-	//switch (rand() % 4)
-	//{
-	//case 0:
-	//	if (getPosx() < 0 || getPosx() > 500)break;
-	//	setPosx(getPosx() + 1);
-	//	break;
-	//case 1:
-	//	if (getPosx() < 0 || getPosx() > 500)break;
-	//	setPosx(getPosx() - 1);
-	//	break;
-	//case 2:
-	//	if (getPosy() < 0 || getPosy() > 500)break;
-	//	setPosy(getPosy() + 1);
-	//	break;
-	//case 3:
-	//	if (getPosy() < 0 || getPosy() > 500)break;
-	//	setPosy(getPosy() - 1);
-	//	break;
-	//}// 몬스터 이동 
-
+	if (traceclid == -1)return;
 	moveTowardsPlayer(_clients[traceclid].getPosx(), _clients[traceclid].getPosy());
-
 	unordered_set<int> _nearvl;
 	for (auto& pl : _clients)
 	{
@@ -355,11 +344,34 @@ void Monster::move()
 	}
 }
 
+void Monster::randommove()
+{
+	switch (rand() % 4)
+	{
+	case 0:
+		if (getPosx() < 0 || getPosx() > 500)break;
+		setPosx(getPosx() + 1);
+		break;
+	case 1:
+		if (getPosx() < 0 || getPosx() > 500)break;
+		setPosx(getPosx() - 1);
+		break;
+	case 2:
+		if (getPosy() < 0 || getPosy() > 500)break;
+		setPosy(getPosy() + 1);
+		break;
+	case 3:
+		if (getPosy() < 0 || getPosy() > 500)break;
+		setPosy(getPosy() - 1);
+		break;
+	}// 몬스터 이동 
+}
+
 void Monster::moveTowardsPlayer(short playerx, short playery)
 {
 	Astar pathfinder;
-	std::vector<AstarNode> path = pathfinder.findpath(map, _x, _y, playerx, playery);
-
+	std::vector<AstarNode> path = pathfinder.findpath(_map, _x, _y, playerx, playery);
+	//문제가 ? 일로안들어옴 멀티쓰레드문제같은데? 
 	if (!path.empty()) {
 		AstarNode nextStep = path.front(); // 다음 이동할 위치
 		setPosx(nextStep._x);
@@ -367,4 +379,5 @@ void Monster::moveTowardsPlayer(short playerx, short playery)
 		// 이동 후 상태 업데이트
 	}
 }
+
 
