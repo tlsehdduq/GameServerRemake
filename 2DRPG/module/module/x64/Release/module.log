@@ -1,7 +1,6 @@
 ﻿  NetworkModule.cpp
   코드를 생성하고 있습니다.
-  0 of 201 functions ( 0.0%) were compiled, the rest were copied from previous compilation.
-    0 functions were new in current compilation
-    0 functions had inline decision re-evaluated but remain unchanged
+  Previous IPDB and IOBJ mismatch, fall back to full compilation.
+  All 201 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
   코드를 생성했습니다.
   module.vcxproj -> C:\Users\tlseh\Desktop\게임서버 포폴\GameServerRemake\2DRPG\module\x64\Release\module.exe

@@ -310,9 +310,10 @@ void Monster::move()
 			traceclid = pl.getId();
 		}
 	}
-	if (traceclid == -1)return;
-	moveTowardsPlayer(_clients[traceclid].getPosx(), _clients[traceclid].getPosy());
-	unordered_set<int> _nearvl;
+	if (traceclid == -1)return; // moveTowardsPlayer의 호출이 너무많다. 
+	//moveTowardsPlayer(_clients[traceclid].getPosx(), _clients[traceclid].getPosy());
+	randommove();
+	unordered_set<int> _nearvl; // 움직인 후에 뷰리스트
 	for (auto& pl : _clients)
 	{
 		if (pl._state != STATE::Ingame)continue;
@@ -323,20 +324,20 @@ void Monster::move()
 	}
 	for (auto pl : _nearvl)
 	{
-		if (_prevvl.count(pl) == 0)
+		if (_prevvl.count(pl) == 0) // 움직였는데 시야거리에 들어왔다? Init 기존에 원래있었다? Move 
 			_clients[pl].sendMonsterInit(myid);
 		else
 			_clients[pl].sendMonsterMove(_npcs[myid]);
 	}
 
-	for (auto pl : _prevvl)
+	for (auto pl : _prevvl) // 기존에 시야에 있던 애들중에서 
 	{
-		if (_nearvl.count(pl) == 0)
+		if (_nearvl.count(pl) == 0) //움직이고 나서의 시야거리에 애들이 없다? 
 		{
 			_clients[pl]._vl.lock();
 			if (_clients[pl].monster_view_list.count(myid) == 0) {
 				_clients[pl]._vl.unlock();
-				_clients[pl].sendRemovePacket(myid, 2);
+				_clients[pl].sendRemovePacket(myid, 2); // 삭제 
 			}
 			else
 				_clients[pl]._vl.unlock();
@@ -370,7 +371,7 @@ void Monster::randommove()
 void Monster::moveTowardsPlayer(short playerx, short playery)
 {
 	Astar pathfinder;
-	std::vector<AstarNode> path = pathfinder.findpath(_map, _x, _y, playerx, playery);
+	vector<AstarNode> path = pathfinder.findpath(_map, _x, _y, playerx, playery);
 	//문제가 ? 일로안들어옴 멀티쓰레드문제같은데? 
 	if (!path.empty()) {
 		AstarNode nextStep = path.front(); // 다음 이동할 위치

@@ -186,7 +186,6 @@ void Iocp::WorkerThread()
 				int c_id = static_cast<int>(key);
 				// 몬스터의 시야거리에 플레이어가 있다면 ? move 
 				_npcs[over_ex->target_id].move();
-				//_npcs[over_ex->target_id].moveTowardsPlayer(_clients[key].getPosx(),_clients[key].getPosy());
 				TimerEvent ev{ std::chrono::system_clock::now() + std::chrono::seconds(1s),over_ex->target_id,c_id,EVENT_TYPE::EV_NPC_MOVE };
 				_timer.InitTimerQueue(ev);
 			}
@@ -283,7 +282,6 @@ void Iocp::ProcessPacket(int id, char* packet)
 
 		for (auto& pl : _clients)
 		{
-			if (pl.getId() == -1)break;
 			if (pl._state != STATE::Ingame)continue;
 			if (pl.getId() == id)continue;
 			if (_clients[id].can_see(id, pl.getId(), 1)) // 1 : client client 2 : client monster

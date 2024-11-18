@@ -5,17 +5,24 @@
 # Prerequisites
 *.d
 *.vs
-
+*.pdb
+*.tlog
+*.iobj
+*.log
+*.idb
 # Compiled Object files
 *.slo
 *.lo
 *.o
 *.obj
+*.pdb
+*.ilk
+
 
 # Precompiled Headers
 *.gch
 *.pch
-
+*.pdb
 # Compiled Dynamic libraries
 *.so
 *.dylib
@@ -24,18 +31,18 @@
 # Fortran module files
 *.mod
 *.smod
-
+*.pdb
 # Compiled Static libraries
 *.lai
 *.la
 *.a
 *.lib
-
+*.pdb
 # Executables
 *.exe
 *.out
 *.app
-
+*.pdb
 ### Windows ###
 # Windows thumbnail cache files
 Thumbs.db
@@ -58,8 +65,8 @@ $RECYCLE.BIN/
 *.msix
 *.msm
 *.msp
-
+*.pdb
 # Windows shortcuts
 *.lnk
-
+*.pdb
 # End of https://www.toptal.com/developers/gitignore/api/c++,windows

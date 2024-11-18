@@ -8,8 +8,7 @@ constexpr int MAX_USER = 100000;
 constexpr int MAX_NPC = 200000;
 
 static const int MAPSIZE = 1000;
-constexpr int W_WIDTH = 10;
-constexpr int W_HEIGHT = 10;
+
 
 constexpr char CS_LOGIN = 0;
 constexpr char CS_MOVE_PLAYER = 1;

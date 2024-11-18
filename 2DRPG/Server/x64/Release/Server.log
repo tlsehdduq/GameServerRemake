@@ -1,7 +1,7 @@
-﻿  Astar.cpp
+﻿  Session.cpp
   코드를 생성하고 있습니다.
-  4 of 647 functions ( 0.6%) were compiled, the rest were copied from previous compilation.
+  5 of 556 functions ( 0.9%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
-    1 functions had inline decision re-evaluated but remain unchanged
+    11 functions had inline decision re-evaluated but remain unchanged
   코드를 생성했습니다.
   Server.vcxproj -> C:\Users\tlseh\Desktop\게임서버 포폴\GameServerRemake\2DRPG\x64\Release\Server.exe
