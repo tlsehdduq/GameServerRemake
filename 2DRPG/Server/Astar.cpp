@@ -14,7 +14,7 @@ int AstarNode::calHcost(short fromx, short fromy, short tox, short toy)
 
 int Astar::calculateH(short fromX, short fromY, short toX, short toY)
 {
-	return 0;
+	return abs(fromX - toX) + abs(fromY - toY);
 }
 
 bool Astar::isValid(int map[1000][1000], int x, int y, bool closedList[1000][1000])
@@ -30,8 +30,8 @@ vector<AstarNode> Astar::findpath(int map[1000][1000], short startx, short start
 {
 	std::priority_queue<AstarNode> openList;
 	bool closedList[1000][1000] = { false };
-
-	AstarNode startNode = { startx, starty, 0, calculateH(startx, starty, goalx, goaly), nullptr };
+	
+	AstarNode startNode = { startx, starty, 0,calculateH(startx, starty, goalx, goaly), nullptr };
 	openList.push(startNode);
 
 	int dx[] = { -1, 1, 0, 0 };
