@@ -1,9 +1,2 @@
-﻿  Astar.cpp
-  Iocp.cpp
-C:\Users\tlseh\Desktop\게임서버 포폴\GameServerRemake\2DRPG\Server\Iocp.cpp(201,19): warning C4244: '인수': 'ULONG_PTR'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-  (소스 파일 '/Iocp.cpp'을(를) 컴파일하는 중)
-  
-  Main.cpp
-  Session.cpp
-  코드를 생성하고 있습니다...
+﻿  Session.cpp
   Server.vcxproj -> C:\Users\tlseh\Desktop\게임서버 포폴\GameServerRemake\2DRPG\x64\Debug\Server.exe

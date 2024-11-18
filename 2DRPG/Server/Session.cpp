@@ -151,14 +151,28 @@ void Session::sendMoverPlayerPacket(const Session& client)
 
 void Session::sendRemovePacket(int id, int type)
 {
-	//_vl.lock();
-	//if (player_view_list.count(id))
-	//	player_view_list.erase(id);
-	//else {
-	//	_vl.unlock();
-	//	return;
-	//}
-	//_vl.unlock();
+	_vl.lock();
+	if (type == 1) {
+
+		if (player_view_list.count(id)) {
+			player_view_list.erase(id);
+		}
+		else {
+			_vl.unlock();
+			return;
+		}
+	}
+	else
+	{
+		if (monster_view_list.count(id)) {
+			monster_view_list.erase(id);
+		}
+		else {
+			_vl.unlock();
+			return;
+		}
+	}
+	_vl.unlock();
 	SC_REMOVE_PACKET p;
 	p.size = sizeof(SC_REMOVE_PACKET);
 	p.type = SC_REMOVE;
@@ -291,7 +305,7 @@ void Player::sendAttack(int id, bool onoff)
 
 Monster::Monster()
 {
-	
+
 }
 
 void Monster::move()
@@ -301,18 +315,23 @@ void Monster::move()
 	unordered_set<int> _prevvl;
 	int myid = getId();
 	int traceclid = -1; // 추격 ID 
+	int nearplayer = -1;
 	for (auto& pl : _clients)
 	{
 		if (pl._state != STATE::Ingame)continue; //움직이기 이전 주변애들 파악 
 		if (pl.can_see(pl.getId(), myid, 2))
 		{
-			_prevvl.insert(pl.getId());
 			traceclid = pl.getId();
+			_prevvl.insert(traceclid);
+			//int dis = calculateDistance(pl.getPosx(), pl.getPosy());
+		/*	if (nearplayer > dis) {
+
+			}*/
 		}
 	}
 	if (traceclid == -1)return; // moveTowardsPlayer의 호출이 너무많다. 
-	//moveTowardsPlayer(_clients[traceclid].getPosx(), _clients[traceclid].getPosy());
-	randommove();
+	moveTowardsPlayer(_clients[traceclid].getPosx(), _clients[traceclid].getPosy());
+	//randommove();
 	unordered_set<int> _nearvl; // 움직인 후에 뷰리스트
 	for (auto& pl : _clients)
 	{
@@ -379,6 +398,12 @@ void Monster::moveTowardsPlayer(short playerx, short playery)
 		setPosy(nextStep._y);
 		// 이동 후 상태 업데이트
 	}
+}
+
+int Monster::findNearPlayer(short tox, short toy, short fromx, short fromy)
+{
+
+	return 0;
 }
 
 

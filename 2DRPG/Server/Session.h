@@ -91,7 +91,12 @@ public:
 	void move();
 	void randommove();
 	void moveTowardsPlayer(short playerx, short playery);
+	int findNearPlayer(short tox, short toy, short fromx, short fromy);
 
+	int calculateDistance(short playerX, short playerY) {
+		// x축과 y축 차이를 더한 거리 반환
+		return abs(playerX - _x) + abs(playerY - _y);
+	}
 	atomic_bool isalive = false;
 	mutex _lock;
 
