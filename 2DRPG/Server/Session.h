@@ -49,7 +49,9 @@ protected:
 	SOCKET _socket;
 	char _name[NAME_SIZE];
 
-
+	static std::array<std::pair<short, short>,120> puddle_positions;
+	static std::array<std::pair<short, short>,95> castle_point;
+	static std::array<std::pair<short, short>,150> tree_positions;
 public:
 	STATE _state;
 	mutex _s_lock;
@@ -90,7 +92,10 @@ public:
 	Monster();
 	void move();
 	void randommove();
-	void moveTowardsPlayer(short playerx, short playery);
+	
+	void moveTowardsPlayer(const short playerx, const short playery);
+
+	void initClosedList();
 	int findNearPlayer(short tox, short toy, short fromx, short fromy);
 
 	int calculateDistance(short playerX, short playerY) {

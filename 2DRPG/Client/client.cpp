@@ -37,6 +37,85 @@ void SetCurMessage(string _message);
 
 sf::RenderWindow* g_window;
 sf::Font g_font;
+std::vector<std::pair<short, short>> puddle_positions = {
+	{10, 15}, {50, 100}, {90, 120}, {150, 200}, {200, 250},
+	{30, 40}, {80, 90}, {130, 140}, {180, 190}, {240, 250},
+	{70, 20}, {120, 30}, {170, 40}, {220, 50}, {270, 60},
+	{300, 300}, {320, 350}, {400, 400}, {450, 450}, {480, 490},
+	{20, 300}, {60, 320}, {100, 350}, {200, 400}, {300, 450},
+	{50, 250}, {100, 260}, {150, 270}, {200, 280}, {250, 290},
+	{400, 10}, {420, 60}, {440, 120}, {460, 180}, {480, 250},
+	{50, 30}, {100, 70}, {150, 110}, {200, 150}, {250, 190},
+	{300, 20}, {320, 70}, {340, 120}, {360, 170}, {380, 220},
+	{400, 300}, {420, 350}, {440, 400}, {460, 450}, {490, 480},
+	{30, 480}, {70, 440}, {110, 400}, {150, 360}, {190, 320},
+	{210, 210}, {250, 250}, {290, 290}, {330, 330}, {370, 370},
+	{15, 15}, {60, 60}, {105, 105}, {150, 150}, {195, 195},
+	{240, 240}, {285, 285}, {330, 330}, {375, 375}, {420, 420},
+	{460, 460}, {20, 450}, {40, 430}, {60, 410}, {80, 390},
+	{250, 50}, {260, 100}, {270, 150}, {280, 200}, {290, 250},
+	{300, 300}, {310, 350}, {320, 400}, {330, 450}, {340, 490},
+	{400, 30}, {450, 50}, {480, 70}, {490, 90}, {490, 130},
+	{50, 20}, {100, 50}, {150, 100}, {200, 150}, {250, 200},
+	{300, 250}, {350, 300}, {400, 350}, {450, 400}, {490, 450},
+	{20, 100}, {50, 150}, {80, 200}, {110, 250}, {140, 300},
+	{300, 20}, {350, 60}, {400, 110}, {450, 160}, {490, 210},
+	{100, 490}, {150, 470}, {200, 450}, {250, 430}, {300, 410},
+	{350, 390}, {400, 370}, {450, 350}, {490, 330}, {40, 470},
+};
+std::vector<std::pair<short, short>> castle_point = {
+	{5, 25}, {15, 35}, {25, 45}, {35, 55}, {45, 65},
+	{55, 75}, {65, 85}, {75, 95}, {85, 105}, {95, 115},
+	{105, 125}, {115, 135}, {125, 145}, {135, 155}, {145, 165},
+	{155, 175}, {165, 185}, {175, 195}, {185, 205}, {195, 215},
+	{205, 225}, {215, 235}, {225, 245}, {235, 255}, {245, 265},
+	{255, 275}, {265, 285}, {275, 295}, {285, 305}, {295, 315},
+	{305, 325}, {315, 335}, {325, 345}, {335, 355}, {345, 365},
+	{355, 375}, {365, 385}, {375, 395}, {385, 405}, {395, 415},
+	{405, 425}, {415, 435}, {425, 445}, {435, 455}, {445, 465},
+	{455, 475}, {465, 485}, {475, 495}, {485, 5}, {495, 15},
+	{5, 495}, {15, 485}, {25, 475}, {35, 465}, {45, 455},
+	{55, 445}, {65, 435}, {75, 425}, {85, 415}, {95, 405},
+	{105, 395}, {115, 385}, {125, 375}, {135, 365}, {145, 355},
+	{155, 345}, {165, 335}, {175, 325}, {185, 315}, {195, 305},
+	{205, 295}, {215, 285}, {225, 275}, {235, 265}, {245, 255},
+	{255, 245}, {265, 235}, {275, 225}, {285, 215}, {295, 205},
+	{305, 195}, {315, 185}, {325, 175}, {335, 165}, {345, 155},
+	{355, 145}, {365, 135}, {375, 125}, {385, 115}, {395, 105},
+	{405, 95}, {415, 85}, {425, 75}, {435, 65}, {445, 55},
+};
+std::vector<std::pair<short, short>> tree_positions = {
+	{3, 7}, {12, 18}, {21, 30}, {33, 45}, {44, 55},
+	{66, 12}, {75, 24}, {85, 35}, {95, 46}, {100, 58},
+	{110, 23}, {120, 37}, {130, 49}, {140, 61}, {150, 72},
+	{160, 83}, {170, 94}, {180, 105}, {190, 116}, {200, 127},
+	{210, 138}, {220, 149}, {230, 160}, {240, 171}, {250, 182},
+	{260, 193}, {270, 204}, {280, 215}, {290, 226}, {300, 237},
+	{310, 248}, {320, 259}, {330, 270}, {340, 281}, {350, 292},
+	{360, 303}, {370, 314}, {380, 325}, {390, 336}, {400, 347},
+	{410, 358}, {420, 369}, {430, 380}, {440, 391}, {450, 402},
+	{460, 413}, {470, 424}, {480, 435}, {490, 446}, {500, 457},
+	{5, 10}, {15, 20}, {25, 30}, {35, 40}, {45, 50},
+	{55, 60}, {65, 70}, {75, 80}, {85, 90}, {95, 100},
+	{105, 110}, {115, 120}, {125, 130}, {135, 140}, {145, 150},
+	{155, 160}, {165, 170}, {175, 180}, {185, 190}, {195, 200},
+	{205, 210}, {215, 220}, {225, 230}, {235, 240}, {245, 250},
+	{255, 260}, {265, 270}, {275, 280}, {285, 290}, {295, 300},
+	{305, 310}, {315, 320}, {325, 330}, {335, 340}, {345, 350},
+	{355, 360}, {365, 370}, {375, 380}, {385, 390}, {395, 400},
+	{405, 410}, {415, 420}, {425, 430}, {435, 440}, {445, 450},
+	{455, 460}, {465, 470}, {475, 480}, {485, 490}, {495, 500},
+	{13, 17}, {23, 27}, {33, 37}, {43, 47}, {53, 57},
+	{63, 67}, {73, 77}, {83, 87}, {93, 97}, {103, 107},
+	{113, 117}, {123, 127}, {133, 137}, {143, 147}, {153, 157},
+	{163, 167}, {173, 177}, {183, 187}, {193, 197}, {203, 207},
+	{213, 217}, {223, 227}, {233, 237}, {243, 247}, {253, 257},
+	{263, 267}, {273, 277}, {283, 287}, {293, 297}, {303, 307},
+	{313, 317}, {323, 327}, {333, 337}, {343, 347}, {353, 357},
+	{363, 367}, {373, 377}, {383, 387}, {393, 397}, {403, 407},
+	{413, 417}, {423, 427}, {433, 437}, {443, 447}, {453, 457},
+	{463, 467}, {473, 477}, {483, 487}, {493, 497}, {5, 487},
+};
 
 class OBJECT {
 public:
@@ -145,6 +224,9 @@ unordered_map <int, OBJECT> monsters;
 OBJECT white_tile;
 OBJECT black_tile;
 OBJECT Monser;
+OBJECT puddle;
+OBJECT castle;
+OBJECT Tree;
 
 ////////////////////// wc //////////////////////////
 OBJECT chatUI;
@@ -156,6 +238,9 @@ sf::Texture* playerL;
 sf::Texture* playerLAtt;
 
 sf::Texture* board;
+sf::Texture* obstacle;
+sf::Texture* castle_obstacle;
+sf::Texture* Tree_obs;
 sf::Texture* devil;
 sf::Texture* Dragon;
 
@@ -164,6 +249,9 @@ sf::Texture* Dragon;
 void client_initialize()
 {
 	board = new sf::Texture;
+	obstacle = new sf::Texture;
+	castle_obstacle = new sf::Texture;
+	Tree_obs = new sf::Texture;
 	devil = new sf::Texture;
 	Dragon = new sf::Texture;
 	player = new sf::Texture;
@@ -174,13 +262,17 @@ void client_initialize()
 	ChatUI = new sf::Texture;
 	/// ////////////////////////////////////////////////
 
-	board->loadFromFile("Background.jpg");
+	board->loadFromFile("MapTile.png");
+	obstacle->loadFromFile("block.png");
+	castle_obstacle->loadFromFile("castle.png");
+	Tree_obs->loadFromFile("tree.png");
 	player->loadFromFile("Reaper.png");
 	devil->loadFromFile("Devil.png");
 	Dragon->loadFromFile("Dragon.png");
 	playerAtt->loadFromFile("ReaperAtt.png");
 	playerL->loadFromFile("Reaper_left.png");
 	playerLAtt->loadFromFile("ReaperAtt_left.png");
+
 
 	////////////////////// wc //////////////////////////
 	ChatUI->loadFromFile("chat.png");
@@ -192,13 +284,22 @@ void client_initialize()
 	}
 	white_tile = OBJECT{ *board, 5, 5, TILE_WIDTH, TILE_WIDTH };
 	black_tile = OBJECT{ *board, 69, 5, TILE_WIDTH, TILE_WIDTH };
-	avatar = OBJECT{ *player,0, 0, 900, 900 };
+	puddle = OBJECT{ *obstacle,0,0,TILE_WIDTH,TILE_WIDTH };
+	castle = OBJECT{ *castle_obstacle,0,0,TILE_WIDTH,TILE_WIDTH };
+	Tree = OBJECT{ *Tree_obs,0,0,32,32 };
+	Tree.set_scale(2.0, 2.0);
+
+	avatar = OBJECT{ *player,1, 0, 900, 900 };
 	avatar.set_scale(0.1, 0.1);
 	avatar.move(4, 4);
 
 	////////////////////// wc //////////////////////////
 	chatUI = OBJECT{ *ChatUI, 0, 0, 400, 206 };
 	/// ////////////////////////////////////////////////
+	cout << puddle_positions.size() << endl;
+	cout << castle_point.size() << endl;
+	cout << tree_positions.size() << endl;
+
 }
 
 
@@ -490,14 +591,53 @@ void client_main()
 			int tile_x = i + g_left_x;
 			int tile_y = j + g_top_y;
 			if ((tile_x < 0) || (tile_y < 0)) continue;
-			if (0 == (tile_x / 3 + tile_y / 3) % 2) {
-				white_tile.a_move(TILE_WIDTH * i, TILE_WIDTH * j);
-				white_tile.a_draw();
+
+			// 장애물 확인
+			bool is_puddle = false;
+			for (const auto& puddle : puddle_positions) {
+				if (tile_x == puddle.first && tile_y == puddle.second) {
+					is_puddle = true;
+					break;
+				}
 			}
-			else
-			{
-				black_tile.a_move(TILE_WIDTH * i, TILE_WIDTH * j);
-				black_tile.a_draw();
+			bool is_castle = false;
+			for (const auto& c_puddle : castle_point) {
+				if (tile_x == c_puddle.first && tile_y == c_puddle.second) {
+					is_castle = true;
+					break;
+				}
+			}
+			bool is_tree = false;
+			for (const auto& trees : tree_positions) {
+				if (tile_x == trees.first && tile_y == trees.second) {
+					is_tree = true;
+					break;
+				}
+			}
+
+			if (is_puddle) {
+				// 장애물 렌더링
+				puddle.a_move(TILE_WIDTH * i, TILE_WIDTH * j);
+				puddle.a_draw();
+			}
+			else {
+				 //기본 타일 렌더링
+				if (0 == (tile_x / 3 + tile_y / 3) % 2) {
+					white_tile.a_move(TILE_WIDTH * i, TILE_WIDTH * j);
+					white_tile.a_draw();
+				}
+				else {
+					black_tile.a_move(TILE_WIDTH * i, TILE_WIDTH * j);
+					black_tile.a_draw();
+				}
+				if (is_castle) {
+					castle.a_move(TILE_WIDTH * i, TILE_WIDTH * j);
+					castle.a_draw();
+				}
+				if (is_tree) {
+					Tree.a_move(TILE_WIDTH * i, TILE_WIDTH * j);
+					Tree.a_draw();
+				}
 			}
 		}
 	avatar.draw();

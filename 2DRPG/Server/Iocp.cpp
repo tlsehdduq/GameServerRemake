@@ -343,8 +343,7 @@ void Iocp::ProcessPacket(int id, char* packet)
 			if (nearvnpclist.count(npcid) == 0)
 			{
 				_npcs[npcid].isalive = false;
-				_clients[id].sendMonsterRemove(npcid);
-				_clients[id].monster_view_list.erase(npcid);
+				_clients[id].sendRemovePacket(npcid,2);
 			}
 		}
 	}
@@ -379,6 +378,7 @@ void Iocp::InitializedMonster() // 몬스터 랜덤 좌표지정
 		_npcs[i].setPosy(uid(dre));
 		_npcs[i].setId(i);
 		_npcs[i].setHp(100);
+		_npcs[i].initClosedList();
 	}
 
 	// 여기서 몬스터 정보 전송? 
