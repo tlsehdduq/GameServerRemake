@@ -295,10 +295,11 @@ void client_initialize()
 
 	////////////////////// wc //////////////////////////
 	chatUI = OBJECT{ *ChatUI, 0, 0, 400, 206 };
+	chatUI.a_move(500, 500);
 	/// ////////////////////////////////////////////////
-	cout << puddle_positions.size() << endl;
-	cout << castle_point.size() << endl;
-	cout << tree_positions.size() << endl;
+	//cout << puddle_positions.size() << endl;
+	//cout << castle_point.size() << endl;
+	//cout << tree_positions.size() << endl;
 
 }
 

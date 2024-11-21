@@ -34,7 +34,7 @@ public:
 	void sendLoginPacket();
 	void sendAddPacket(const Session& client);
 	void sendMoverPlayerPacket(const Session& client);
-	void sendRemovePacket(int id,int type);
+	void sendRemovePacket(int id, int type);
 
 protected:
 	OVERLAPPED_EX _s_over;
@@ -49,9 +49,9 @@ protected:
 	SOCKET _socket;
 	char _name[NAME_SIZE];
 
-	static std::array<std::pair<short, short>,120> puddle_positions;
-	static std::array<std::pair<short, short>,95> castle_point;
-	static std::array<std::pair<short, short>,150> tree_positions;
+	const static std::array<std::pair<short, short>, 120> puddle_positions;
+	const static std::array<std::pair<short, short>, 95> castle_point;
+	const static std::array<std::pair<short, short>, 150> tree_positions;
 public:
 	STATE _state;
 	mutex _s_lock;
@@ -64,7 +64,7 @@ public:
 	unordered_set <int> monster_view_list;
 	mutex _vl;
 
-	
+
 
 };
 class Monster;
@@ -80,36 +80,29 @@ public:
 	void sendMonsterInit(int id);
 	void sendMonsterMove(Monster& monster);
 	void sendMonsterRemove(int id);
-	void sendAttack(int id,bool onoff);
+	void sendAttack(int id, bool onoff);
 private:
 	int _attrange = 1;
 
 };
 
-class Monster : public Session
-{
+class Monster : public Session {
 public:
 	Monster();
 	void move();
 	void randommove();
-	
 	void moveTowardsPlayer(const short playerx, const short playery);
 
-	void initClosedList();
 	int findNearPlayer(short tox, short toy, short fromx, short fromy);
 
 	int calculateDistance(short playerX, short playerY) {
-		// x축과 y축 차이를 더한 거리 반환
 		return abs(playerX - _x) + abs(playerY - _y);
 	}
+
 	atomic_bool isalive = false;
 	mutex _lock;
 
-private:
-	// 길찾기 알고리즘 
-	static int _map[MAPSIZE][MAPSIZE];
-	static bool _closedList[MAPSIZE][MAPSIZE];
-	static int _cost[MAPSIZE][MAPSIZE];
+
 
 };
 

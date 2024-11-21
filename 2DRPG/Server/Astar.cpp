@@ -1,7 +1,6 @@
 #include "stdafx.h"
 #include "Astar.h"
 
-
 int AstarNode::calFcost() const
 {
 	return _gcost + _hcost;
@@ -17,34 +16,19 @@ int Astar::calculateH(short fromX, short fromY, short toX, short toY)
 	return abs(fromX - toX) + abs(fromY - toY);
 }
 
-bool Astar::isValid(int map[1000][1000], int x, int y, bool closedList[1000][1000])
+bool Astar::isValid( int x, int y, bool closedList[1000][1000])
 {
 	// 맵의 범위 내에 있고, 장애물이 없으며, 아직 방문하지 않은 경우에만 유효
-	if (x >= 0 && x < 1000 && y >= 0 && y < 1000 && map[x][y] == 0 && !closedList[x][y]) {
+	if (x >= 0 && x < 1000 && y >= 0 && y < 1000 && _map[x][y] == 0 && !closedList[x][y]) {
 		return true;
 	}
 	return false;
 }
 
-vector<AstarNode> Astar::findpath(int map[1000][1000], short startx, short starty, short goalx, short goaly, const bool _closedList[1000][1000])
+vector<AstarNode> Astar::findpath(short startx, short starty, short goalx, short goaly)
 {
-	//vector<AstarNode> path;
-	//int dx = (goalx > startx) ? 1 : -1;
-	//int dy = (goaly > starty) ? 1 : -1;
-
-	//short x = startx, y = starty;
-	//if (x != goalx || y != goaly)
-	//{
-	//	if (x != goalx) x += dx;
-	//	if (y != goaly) y += dy;
-	//	path.push_back({ x, y, 0, 0, nullptr }); // 간단한 노드
-	//	return path;
-	//	
-	//}
-
-	//return path;
 	std::priority_queue<AstarNode> openList;
-	bool closedList[1000][1000] = { _closedList };
+	bool closedList[1000][1000] = { false };
 	
 	AstarNode startNode = { startx, starty, 0,calculateH(startx, starty, goalx, goaly), nullptr };
 	openList.push(startNode);
@@ -72,12 +56,13 @@ vector<AstarNode> Astar::findpath(int map[1000][1000], short startx, short start
 			int newX = current._x + dx[i];
 			int newY = current._y + dy[i];
 
-			if (isValid(map, newX, newY, closedList)) {
+			if (isValid( newX, newY, closedList)) {
 				int gCost = current._gcost + 1;
 				int hCost = calculateH(newX, newY, goalx, goaly);
 				AstarNode neighbor(newX, newY, gCost, hCost, new AstarNode(current));
 
 				openList.push(neighbor);
+				
 			}
 		}
 	}

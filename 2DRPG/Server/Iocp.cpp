@@ -263,7 +263,8 @@ void Iocp::ProcessPacket(int id, char* packet)
 	}
 				  break;
 	case CS_CHAT: {
-
+		CS_CHAT_PACKET* p;
+		cout << " Recv message " << endl;
 	}
 				break;
 	case CS_MOVE_PLAYER: {
@@ -378,7 +379,6 @@ void Iocp::InitializedMonster() // 몬스터 랜덤 좌표지정
 		_npcs[i].setPosy(uid(dre));
 		_npcs[i].setId(i);
 		_npcs[i].setHp(100);
-		_npcs[i].initClosedList();
 	}
 
 	// 여기서 몬스터 정보 전송? 

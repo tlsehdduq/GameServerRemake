@@ -12,6 +12,7 @@
 #include <random>
 #include <set>
 #include<queue>
+#include<memory>
 
 #pragma comment(lib, "WS2_32.lib")
 #pragma comment(lib, "MSWSock.lib")
