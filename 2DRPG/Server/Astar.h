@@ -44,8 +44,8 @@ public:
 	}
 
 private:
-	int calculateH(short fromX, short fromY, short toX, short toY);
-	bool isValid(int x, int y, bool closedList[1000][1000]); // 유효성 검사 함수 추가
+	inline int calculateH(short fromX, short fromY, short toX, short toY);
+	inline bool isValid(int x, int y, bool closedList[1000][1000]); // 유효성 검사 함수 추가
 
 public:
 	vector<AstarNode>findpath(short startx, short starty, short goalx, short goaly);

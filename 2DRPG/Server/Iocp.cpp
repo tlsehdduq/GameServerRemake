@@ -3,6 +3,18 @@
 
 extern array<Player, MAX_USER> _clients;
 extern array<Monster, MAX_NPC> _npcs;
+
+extern unordered_set<int> _rightupSection;
+extern unordered_set<int> _rightdownSection;
+extern unordered_set<int> _leftupSection;
+extern unordered_set<int> _leftdownSection;
+
+extern unordered_set<int> _rightupNpcSection;
+extern unordered_set<int> _rightdownNpcSection;
+extern unordered_set<int> _leftupNpcSection;
+extern unordered_set<int> _leftdownNpcSection;
+
+
 extern HANDLE _iocphandle;
 
 Iocp::Iocp()
@@ -129,6 +141,7 @@ void Iocp::WorkerThread()
 				_clients[client_id].setPosy(0);
 				_clients[client_id].setId(client_id);
 				_clients[client_id].setSocket(_clientsocket);
+				_clients[client_id]._section = MAP_SECTION::FREE;
 				CreateIoCompletionPort(reinterpret_cast<HANDLE>(_clientsocket), _iocphandle, client_id, 0);
 				if (_iocphandle == INVALID_HANDLE_VALUE) {
 					cout << " Handle error " << endl;
@@ -173,26 +186,59 @@ void Iocp::WorkerThread()
 							break;
 		case COMP_TYPE::NPC_UPDATE: {
 			bool keepalive = false;
-			for (int j = 0; j < MAX_USER; ++j)
-			{
-				if (_clients[j]._state != STATE::Ingame)continue;
-				if (_clients[j].can_see(j, over_ex->target_id, 2)) //시야 거리에?  
-				{
-					keepalive = true;
-					break;
+			switch (_npcs[over_ex->target_id]._section) {
+			case MAP_SECTION::LEFT_DOWN: {
+				for (auto& pl : _leftdownSection) {
+					if (_clients[pl]._state != STATE::Ingame)continue;
+					if (_clients[pl].can_see(pl, over_ex->target_id, 2)) {
+						keepalive = true;
+						break;
+					}
 				}
+				break;
 			}
+			case MAP_SECTION::LEFT_UP: {
+				for (auto& pl : _leftupSection) {
+					if (_clients[pl]._state != STATE::Ingame)continue;
+					if (_clients[pl].can_see(pl, over_ex->target_id, 2)) {
+						keepalive = true;
+						break;
+					}
+				}
+				break;
+			}
+			case MAP_SECTION::RIGHT_UP: {
+				for (auto& pl : _rightupSection) {
+					if (_clients[pl]._state != STATE::Ingame)continue;
+					if (_clients[pl].can_see(pl, over_ex->target_id, 2)) {
+						keepalive = true;
+						break;
+					}
+				}
+				break;
+			}
+			case MAP_SECTION::RIGHT_DOWN: {
+				for (auto& pl : _rightdownSection) {
+					if (_clients[pl]._state != STATE::Ingame)continue;
+					if (_clients[pl].can_see(pl, over_ex->target_id, 2)) {
+						keepalive = true;
+						break;
+					}
+				}
+				break;
+			}
+			}
+
 			if (keepalive) {
 				int c_id = static_cast<int>(key);
-				// 몬스터의 시야거리에 플레이어가 있다면 ? move 
-				_npcs[over_ex->target_id].move();
+				_npcs[over_ex->target_id].MonsterMove();
 				TimerEvent ev{ std::chrono::system_clock::now() + std::chrono::seconds(1s),over_ex->target_id,c_id,EVENT_TYPE::EV_NPC_MOVE };
 				_timer.InitTimerQueue(ev);
 			}
 
 			delete over_ex;
 		}
-			break;
+								  break;
 
 		case COMP_TYPE::END_ATTACK: {
 			for (auto& pl : _clients)
@@ -213,40 +259,105 @@ void Iocp::ProcessPacket(int id, char* packet)
 {
 	switch (packet[1])
 	{
-
 	case CS_LOGIN: {
 		CS_LOGIN_PACKET* p = reinterpret_cast<CS_LOGIN_PACKET*>(packet);
-		//_clients[id].setId(p->id);
-		short r_x = rand() % 1000;
-		short r_y = rand() % 1000;
+
+		static std::random_device rd; // 고유한 시드를 위한 random_device
+		static std::default_random_engine dre{ rd() }; // random_device를 사용하여 초기화된 엔진
+		std::uniform_int_distribution<int> uid{ 0, 1000 };
+
+		short r_x = uid(dre);
+		short r_y = uid(dre);
+
 		_clients[id].setName(p->name);
 		{
 			lock_guard<mutex>ll{ _clients[id]._s_lock };
 			_clients[id]._state = STATE::Ingame;
 			_clients[id].setPosx(r_x);
 			_clients[id].setPosy(r_y);
+
+			if (_clients[id].getPosx() > MAP_X_HALF && _clients[id].getPosy() < MAP_Y_HALF) {
+				_clients[id]._section = MAP_SECTION::RIGHT_UP;
+				_rightupSection.insert(id);
+			}
+			else if (_clients[id].getPosx() > MAP_X_HALF && _clients[id].getPosy() > MAP_Y_HALF) {
+				_clients[id]._section = MAP_SECTION::RIGHT_DOWN;
+				_rightdownSection.insert(id);
+			}
+			else if (_clients[id].getPosx() < MAP_X_HALF && _clients[id].getPosy() > MAP_Y_HALF) {
+				_clients[id]._section = MAP_SECTION::LEFT_DOWN;
+				_leftdownSection.insert(id);
+			}
+			else {
+				_clients[id]._section = MAP_SECTION::LEFT_UP;
+				_leftupSection.insert(id);
+			}
 		}
 		// 다시 보내야함 
 		_clients[id].sendLoginPacket();
-		for (auto& pl : _clients)
+		// 같은 지역에 있는 클라이언트 들에게만 보냄? 
+		switch (_clients[id]._section) // 맵 섹션별로 있는 플레이어들한테만 Add 
 		{
-			{
-				lock_guard<mutex>ll(pl._s_lock);
-				if (pl._state != STATE::Ingame)continue;
+		case MAP_SECTION::LEFT_DOWN: {
+			for (auto& pl : _leftdownSection) {
+				if (pl == id)continue;
+				_clients[id].sendAddPacket(_clients[pl]);
+				_clients[pl].sendAddPacket(_clients[id]);
 			}
-			// SEND ADD PACKET 
-			if (pl.getId() == id)continue;
-			pl.sendAddPacket(_clients[id]);
-			_clients[id].sendAddPacket(pl);
+			for (auto& npcid : _leftdownNpcSection) {
+				if (_npcs[npcid].isalive == false)continue;
+				if (_clients[id].can_see(id, npcid, 2)) {
+					_clients[id].sendMonsterInit(npcid);
+					NpcMoveOn(npcid, id);
+				}
+			}
+			break;
 		}
-		// 이것도 수정 
-		for (auto& npc : _npcs)
-		{
-			if (npc.isalive == false)continue;
-			if (_clients[id].can_see(id, npc.getId(), 2)) {
-				_clients[id].sendMonsterInit(npc.getId()); // NPC의 모든 정보들을 전송? 시야거리에 있는 애들만 전송 
-				NpcMoveOn(npc.getId(), id); // NPC 타이머 작동 
+		case MAP_SECTION::LEFT_UP: {
+			for (auto& pl : _leftupSection) {
+				if (pl == id)continue;
+				_clients[id].sendAddPacket(_clients[pl]);
+				_clients[pl].sendAddPacket(_clients[id]);
 			}
+			for (auto& npcid : _leftupNpcSection) {
+				if (_npcs[npcid].isalive == false)continue;
+				if (_clients[id].can_see(id, npcid, 2)) {
+					_clients[id].sendMonsterInit(npcid);
+					NpcMoveOn(npcid, id);
+				}
+			}
+			break;
+		}
+		case MAP_SECTION::RIGHT_DOWN: {
+			for (auto& pl : _rightdownSection) {
+				if (pl == id)continue;
+				_clients[id].sendAddPacket(_clients[pl]);
+				_clients[pl].sendAddPacket(_clients[id]);
+			}
+			for (auto& npcid : _rightdownNpcSection) {
+				if (_npcs[npcid].isalive == false)continue;
+				if (_clients[id].can_see(id, npcid, 2)) {
+					_clients[id].sendMonsterInit(npcid);
+					NpcMoveOn(npcid, id);
+				}
+			}
+			break;
+		}
+		case MAP_SECTION::RIGHT_UP: {
+			for (auto& pl : _rightupSection) {
+				if (pl == id)continue;
+				_clients[id].sendAddPacket(_clients[pl]);
+				_clients[pl].sendAddPacket(_clients[id]);
+			}
+			for (auto& npcid : _rightupNpcSection) {
+				//if (_npcs[npcid].isalive == false)continue;
+				if (_clients[id].can_see(id, npcid, 2)) {
+					_clients[id].sendMonsterInit(npcid);
+					NpcMoveOn(npcid, id);
+				}
+			}
+			break;
+		}
 		}
 	}
 				 break;
@@ -256,39 +367,81 @@ void Iocp::ProcessPacket(int id, char* packet)
 		{
 			if (pl.getId() == -1)break;
 			if (pl.getId() == id)continue;
-			pl.sendAttack(id,true);
-			TimerEvent ev{ std::chrono::system_clock::now() + std::chrono::milliseconds(100ms),id,EVENT_TYPE::EV_ATTACK};
+			pl.sendAttack(id, true);
+			TimerEvent ev{ std::chrono::system_clock::now() + std::chrono::milliseconds(100ms),id,EVENT_TYPE::EV_ATTACK };
 			_timer.InitTimerQueue(ev);
 		}
 	}
 				  break;
 	case CS_CHAT: {
-		CS_CHAT_PACKET* p;
+		CS_CHAT_PACKET* p = reinterpret_cast<CS_CHAT_PACKET*>(packet);
 		cout << " Recv message " << endl;
+		for (auto& pl : _clients)
+		{
+			pl.sendChatPacket(p->message, id);
+		}
 	}
 				break;
 	case CS_MOVE_PLAYER: {
 		CS_MOVE_PLAYER_PACKET* p = reinterpret_cast<CS_MOVE_PLAYER_PACKET*>(packet);
 		_clients[id].setMoveTime(p->move_time);
 		_clients[id].move(p->dir);
+
 		if (p->dir == 2)
 			_clients[id]._leftright = true;
 		else if (p->dir == 3)
 			_clients[id]._leftright = false;
+
+		_clients[id].setSection(false);
 
 		unordered_set<int> nearvlist;
 		_clients[id]._vl.lock();
 		unordered_set<int> oldvlist = _clients[id].player_view_list;
 		_clients[id]._vl.unlock();
 
-		for (auto& pl : _clients)
-		{
-			if (pl._state != STATE::Ingame)continue;
-			if (pl.getId() == id)continue;
-			if (_clients[id].can_see(id, pl.getId(), 1)) // 1 : client client 2 : client monster
-				nearvlist.insert(pl.getId());
-		}
 		_clients[id].sendMoverPlayerPacket(_clients[id]); // 나한테 내가 움직인걸 보낸다 .
+
+		switch (_clients[id]._section) {
+
+		case MAP_SECTION::LEFT_DOWN: {
+
+			for (auto& pl : _leftdownSection) {
+				if (_clients[pl]._state != STATE::Ingame)continue;
+				if (pl == id)continue;
+				if (_clients[id].can_see(id, pl, 1))
+					nearvlist.insert(pl);
+			}
+			break;
+		}
+		case MAP_SECTION::LEFT_UP: {
+			for (auto& pl : _leftupSection) {
+				if (_clients[pl]._state != STATE::Ingame)continue;
+				if (pl == id)continue;
+				if (_clients[id].can_see(id, pl, 1))
+					nearvlist.insert(pl);
+			}
+			break;
+
+		}
+		case MAP_SECTION::RIGHT_UP: {
+			for (auto& pl : _rightupSection) {
+				if (_clients[pl]._state != STATE::Ingame)continue;
+				if (pl == id)continue;
+				if (_clients[id].can_see(id, pl, 1))
+					nearvlist.insert(pl);
+			}
+			break;
+		}
+		case MAP_SECTION::RIGHT_DOWN: {
+			for (auto& pl : _rightdownSection) {
+				if (_clients[pl]._state != STATE::Ingame)continue;
+				if (pl == id)continue;
+				if (_clients[id].can_see(id, pl, 1))
+					nearvlist.insert(pl);
+			}
+			break;
+		}
+		}
 
 		for (auto& pl : nearvlist)
 		{
@@ -306,6 +459,7 @@ void Iocp::ProcessPacket(int id, char* packet)
 			if (oldvlist.count(pl) == 0)
 				_clients[id].sendAddPacket(_clients[pl]);//  ? 
 		}
+
 		for (auto& pl : oldvlist)
 		{
 			if (nearvlist.count(pl) == 0)
@@ -315,18 +469,52 @@ void Iocp::ProcessPacket(int id, char* packet)
 			}
 		}
 		// --------------------------------npc viewlist--------------------------------------------
-
 		unordered_set<int> nearvnpclist;
 		_clients[id]._vl.lock();
 		unordered_set<int> oldvnpclist = _clients[id].monster_view_list;
 		_clients[id]._vl.unlock();
 
-		for (auto& npc : _npcs)
-		{
-			if (_clients[id].can_see(id, npc.getId(), 2) == true)
+		switch (_clients[id]._section) {
+		case MAP_SECTION::LEFT_DOWN: {
+			for (auto& npc : _leftdownNpcSection)
 			{
-				nearvnpclist.insert(npc.getId());
+				if (_clients[id].can_see(id, npc, 2) == true)
+				{
+					nearvnpclist.insert(npc);
+				}
 			}
+			break;
+		}
+		case MAP_SECTION::LEFT_UP: {
+			for (auto& npc : _leftupNpcSection)
+			{
+				if (_clients[id].can_see(id, npc, 2) == true)
+				{
+					nearvnpclist.insert(npc);
+				}
+			}
+			break;
+		}
+		case  MAP_SECTION::RIGHT_UP: {
+			for (auto& npc : _rightupNpcSection)
+			{
+				if (_clients[id].can_see(id, npc, 2) == true)
+				{
+					nearvnpclist.insert(npc);
+				}
+			}
+			break;
+		}
+		case MAP_SECTION::RIGHT_DOWN: {
+			for (auto& npc : _rightdownNpcSection)
+			{
+				if (_clients[id].can_see(id, npc, 2) == true)
+				{
+					nearvnpclist.insert(npc);
+				}
+			}
+			break;
+		}
 		}
 		for (auto npcid : nearvnpclist)
 		{
@@ -344,7 +532,7 @@ void Iocp::ProcessPacket(int id, char* packet)
 			if (nearvnpclist.count(npcid) == 0)
 			{
 				_npcs[npcid].isalive = false;
-				_clients[id].sendRemovePacket(npcid,2);
+				_clients[id].sendRemovePacket(npcid, 2);
 			}
 		}
 	}
@@ -373,21 +561,37 @@ void Iocp::InitializedMonster() // 몬스터 랜덤 좌표지정
 
 	for (int i = 0; i < MAX_NPC; ++i)
 	{
-		//_npcs[i].setPosx(3);
 		_npcs[i].setPosx(uid(dre));
-		//_npcs[i].setPosy(2);
 		_npcs[i].setPosy(uid(dre));
 		_npcs[i].setId(i);
 		_npcs[i].setHp(100);
-	}
 
-	// 여기서 몬스터 정보 전송? 
+		if (_npcs[i].getPosx() > MAP_X_HALF && _npcs[i].getPosy() < MAP_Y_HALF) {
+			_npcs[i]._section = MAP_SECTION::RIGHT_UP;
+			_rightupNpcSection.insert(i);
+		}
+		else if (_npcs[i].getPosx() > MAP_X_HALF && _npcs[i].getPosy() > MAP_Y_HALF) {
+			_npcs[i]._section = MAP_SECTION::RIGHT_DOWN;
+			_rightdownNpcSection.insert(i);
+		}
+		else if (_npcs[i].getPosx() < MAP_X_HALF && _npcs[i].getPosy() > MAP_Y_HALF) {
+			_npcs[i]._section = MAP_SECTION::LEFT_DOWN;
+			_leftdownNpcSection.insert(i);
+		}
+		else {
+			_npcs[i]._section = MAP_SECTION::LEFT_UP;
+			_leftupNpcSection.insert(i);
+		}
+
+
+
+	}
 
 }
 
 void Iocp::NpcMoveOn(int npcid, int id)
 {
-	if (_npcs[npcid].getHp() <= 0)return;
+	if (_npcs[npcid].getHp() <= 0 || _npcs[npcid].isalive == true)return;
 	bool old_state = false;
 	if (false == atomic_compare_exchange_strong(&_npcs[npcid].isalive, &old_state, true))return;
 

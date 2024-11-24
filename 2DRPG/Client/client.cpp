@@ -465,34 +465,6 @@ void ProcessPacket(char* ptr)
 		}
 		break;
 	}
-	////////////////////// wc //////////////////////////
-	/*case SC_CHAT:
-	{
-		SC_CHAT_PACKET* my_packet = reinterpret_cast<SC_CHAT_PACKET*>(ptr);
-		int other_id = my_packet->id;
-		if (other_id == g_myid) {
-			avatar.set_chat(my_packet->mess);
-		}
-		else {
-			players[other_id].set_chat(my_packet->mess);
-		}
-
-		break;
-	}*/
-	/*else if(MAX_USER < id && id < (MAX_NPC / 2)) {
-			players[id] = OBJECT{ *devil, 0, 0, 161, 133 };
-			players[id].id = id;
-			players[id].move(my_packet->x, my_packet->y);
-			players[id].set_name(my_packet->name);
-			players[id].show();
-		}
-		else {
-			players[id] = OBJECT{ *Dragon, 0, 0, 256, 256 };
-			players[id].id = id;
-			players[id].move(my_packet->x, my_packet->y);
-			players[id].set_name(my_packet->name);
-			players[id].show();
-		}*/
 	case SC_MONTSER_INIT:
 	{
 		SC_MONTSER_INIT_PACKET* p = reinterpret_cast<SC_MONTSER_INIT_PACKET*>(ptr);
@@ -654,15 +626,15 @@ void client_main()
 
 	g_window->draw(text);
 	////////////////////// wc //////////////////////////
-	chatUI.a_move(630, 730);
+	chatUI.a_move(0, 450);
 	chatUI.a_draw();
 
-	chatmessage.setPosition(700, 900);
+	chatmessage.setPosition(60, 620);
 
 	int chatSize = curChatMessage.size();
 
 	for (int i = 0; i < chatSize; ++i) {
-		curChatMessage[i].setPosition(650, 850 - i * 30);
+		curChatMessage[i].setPosition(20, 590 - i * 30);
 
 		g_window->draw(curChatMessage[i]);
 	}
@@ -686,7 +658,7 @@ void Login()
 	p.size = sizeof(CS_LOGIN_PACKET);
 	p.type = CS_LOGIN;
 
-	avatar.set_name(p.name);
+	avatar.set_name(Name);
 
 	strcpy_s(p.name, Name);
 	send_packet(&p);
@@ -778,7 +750,7 @@ int main()
 					chat_packet.type = CS_CHAT;
 
 					strcpy_s(chat_packet.message, info.c_str());
-					send_packet(&chat_packet);
+					send_packet(&chat_packet); // 메시지를 보냄 
 					info = "";
 					g_isChat = false;
 					chatmessage.setString(info);
@@ -860,7 +832,8 @@ int main()
 				{
 				case sf::Mouse::Left:
 					pos = sf::Mouse::getPosition(window);
-					if (pos.x > 630 && pos.x < 930 && pos.y > 900 && pos.y < 930)
+					cout << pos.x << " , " << pos.y << endl;
+					if (pos.x > 60 && pos.x < 350 && pos.y > 620 && pos.y < 640)
 						g_isChat = !g_isChat;
 					break;
 				default:

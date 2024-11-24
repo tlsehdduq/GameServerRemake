@@ -19,7 +19,6 @@ public:
 	void InitializedMonster();
 	void NpcMoveOn(int npcid, int id);
 
-	bool CanSee(int from, int  to, int type);
 
 public:
 	SOCKET GetListenSocket();
@@ -42,16 +41,10 @@ private:
 	SOCKET _clientsocket;
 	OVERLAPPED_EX _over;
 	Timer _timer;
-
 	std::chrono::system_clock::time_point start_time;
-
-
 public:
-
 	thread _timerthread;
 	vector<thread> _workerthread;
 
-	//array<Player, MAX_USER> _clients;
-	//array<Monster, MAX_NPC> _npcs;
 };
 

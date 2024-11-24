@@ -3,6 +3,16 @@
 extern array<Player, MAX_USER> _clients;
 extern array<Monster, MAX_NPC> _npcs;
 
+extern unordered_set<int> _rightupSection;
+extern unordered_set<int> _rightdownSection;
+extern unordered_set<int> _leftupSection;
+extern unordered_set<int> _leftdownSection;
+
+extern unordered_set<int> _rightupNpcSection;
+extern unordered_set<int> _rightdownNpcSection;
+extern unordered_set<int> _leftupNpcSection;
+extern unordered_set<int> _leftdownNpcSection;
+
 short Session::getPosx()
 {
 	return _x;
@@ -91,13 +101,174 @@ void Session::doSend(void* packet)
 bool Session::can_see(int from, int to, int type)
 {
 	if (type == 1) {
-		if (abs(_clients[from].getPosx() - _clients[to].getPosx()) > _viewrange)return false;
-		return abs(_clients[from].getPosy() - _clients[to].getPosy()) <= _viewrange;
+		if (abs(_clients[from]._x - _clients[to]._x) > _viewrange)return false;
+		return abs(_clients[from]._y - _clients[to]._y) <= _viewrange;
 	}
 	else
 	{
-		if (abs(_clients[from].getPosx() - _npcs[to].getPosx()) > _viewrange)return false;
-		return abs(_clients[from].getPosy() - _npcs[to].getPosy()) <= _viewrange;
+		if (abs(_clients[from]._x - _npcs[to]._x) > _viewrange)return false;
+		return abs(_clients[from]._y - _npcs[to]._y) <= _viewrange;
+	}
+}
+
+void Session::setSection(bool isnpc)
+{
+	_sectionlock.lock();
+	if (!isnpc) {
+		if (_x > MAP_X_HALF && _y < MAP_Y_HALF) {
+
+			if (_section == MAP_SECTION::RIGHT_DOWN) {
+				_rightdownSection.erase(_id);
+				_section = MAP_SECTION::RIGHT_UP;
+				_rightupSection.insert(_id);
+			}
+			else if (_section == MAP_SECTION::LEFT_UP) {
+				_leftdownSection.erase(_id);
+				_section = MAP_SECTION::RIGHT_UP;
+				_rightupSection.insert(_id);
+			}
+			else if (_section == MAP_SECTION::LEFT_DOWN) {
+				_leftupSection.erase(_id);
+				_section = MAP_SECTION::RIGHT_UP;
+				_rightupSection.insert(_id);
+			}
+			_sectionlock.unlock();
+		}
+		else if (_x > MAP_X_HALF && _y > MAP_Y_HALF) {
+			if (_section == MAP_SECTION::RIGHT_UP) {
+				_rightupSection.erase(_id);
+				_section = MAP_SECTION::RIGHT_DOWN;
+				_rightdownSection.insert(_id);
+			}
+			else if (_section == MAP_SECTION::LEFT_UP) {
+				_leftdownSection.erase(_id);
+				_section = MAP_SECTION::RIGHT_DOWN;
+				_rightdownSection.insert(_id);
+			}
+			else if (_section == MAP_SECTION::LEFT_DOWN) {
+				_leftupSection.erase(_id);
+				_section = MAP_SECTION::RIGHT_DOWN;
+				_rightdownSection.insert(_id);
+			}
+			_sectionlock.unlock();
+		}
+		else if (_x < MAP_X_HALF && _y < MAP_Y_HALF) {
+
+			if (_section == MAP_SECTION::RIGHT_DOWN) {
+				_rightdownSection.erase(_id);
+				_section = MAP_SECTION::LEFT_UP;
+				_leftupSection.insert(_id);
+			}
+			else if (_section == MAP_SECTION::RIGHT_UP) {
+				_rightupSection.erase(_id);
+				_section = MAP_SECTION::LEFT_UP;
+				_leftupSection.insert(_id);
+			}
+			else if (_section == MAP_SECTION::LEFT_DOWN) {
+				_leftupSection.erase(_id);
+				_section = MAP_SECTION::LEFT_UP;
+				_leftupSection.insert(_id);
+			}
+			_sectionlock.unlock();
+		}
+		else {
+
+			if (_section == MAP_SECTION::RIGHT_DOWN) {
+				_rightdownSection.erase(_id);
+				_section = MAP_SECTION::LEFT_DOWN;
+				_leftdownSection.insert(_id);
+			}
+			else if (_section == MAP_SECTION::LEFT_UP) {
+				_leftdownSection.erase(_id);
+				_section = MAP_SECTION::LEFT_DOWN;
+				_leftdownSection.insert(_id);
+			}
+			else if (_section == MAP_SECTION::RIGHT_DOWN) {
+				_rightdownSection.erase(_id);
+				_section = MAP_SECTION::LEFT_DOWN;
+				_leftdownSection.insert(_id);
+			}
+			_sectionlock.unlock();
+		}
+	}
+	else {
+
+		if (_x > MAP_X_HALF && _y < MAP_Y_HALF) {
+
+			if (_section == MAP_SECTION::RIGHT_DOWN) {
+				_rightdownNpcSection.erase(_id);
+				_section = MAP_SECTION::RIGHT_UP;
+				_rightupNpcSection.insert(_id);
+			}
+			else if (_section == MAP_SECTION::LEFT_UP) {
+				_leftdownNpcSection.erase(_id);
+				_section = MAP_SECTION::RIGHT_UP;
+				_rightupNpcSection.insert(_id);
+			}
+			else if (_section == MAP_SECTION::LEFT_DOWN) {
+				_leftupNpcSection.erase(_id);
+				_section = MAP_SECTION::RIGHT_UP;
+				_rightupNpcSection.insert(_id);
+			}
+			_sectionlock.unlock();
+
+		}
+		else if (_x > MAP_X_HALF && _y > MAP_Y_HALF) {
+			if (_section == MAP_SECTION::RIGHT_UP) {
+				_rightupNpcSection.erase(_id);
+				_section = MAP_SECTION::RIGHT_DOWN;
+				_rightdownNpcSection.insert(_id);
+			}
+			else if (_section == MAP_SECTION::LEFT_UP) {
+				_leftdownNpcSection.erase(_id);
+				_section = MAP_SECTION::RIGHT_DOWN;
+				_rightdownNpcSection.insert(_id);
+			}
+			else if (_section == MAP_SECTION::LEFT_DOWN) {
+				_leftupNpcSection.erase(_id);
+				_section = MAP_SECTION::RIGHT_DOWN;
+				_rightdownNpcSection.insert(_id);
+			}
+			_sectionlock.unlock();
+		}
+		else if (_x < MAP_X_HALF && _y < MAP_Y_HALF) {
+
+			if (_section == MAP_SECTION::RIGHT_DOWN) {
+				_rightdownNpcSection.erase(_id);
+				_section = MAP_SECTION::LEFT_UP;
+				_leftupNpcSection.insert(_id);
+			}
+			else if (_section == MAP_SECTION::RIGHT_UP) {
+				_rightupNpcSection.erase(_id);
+				_section = MAP_SECTION::LEFT_UP;
+				_leftupNpcSection.insert(_id);
+			}
+			else if (_section == MAP_SECTION::LEFT_DOWN) {
+				_leftupNpcSection.erase(_id);
+				_section = MAP_SECTION::LEFT_UP;
+				_leftupNpcSection.insert(_id);
+			}
+			_sectionlock.unlock();
+		}
+		else {
+
+			if (_section == MAP_SECTION::RIGHT_DOWN) {
+				_rightdownNpcSection.erase(_id);
+				_section = MAP_SECTION::LEFT_DOWN;
+				_leftdownNpcSection.insert(_id);
+			}
+			else if (_section == MAP_SECTION::LEFT_UP) {
+				_leftdownNpcSection.erase(_id);
+				_section = MAP_SECTION::LEFT_DOWN;
+				_leftdownNpcSection.insert(_id);
+			}
+			else if (_section == MAP_SECTION::RIGHT_DOWN) {
+				_rightdownNpcSection.erase(_id);
+				_section = MAP_SECTION::LEFT_DOWN;
+				_leftdownNpcSection.insert(_id);
+			}
+			_sectionlock.unlock();
+		}
 	}
 }
 
@@ -178,6 +349,16 @@ void Session::sendRemovePacket(int id, int type)
 	doSend(&p);
 }
 
+void Session::sendChatPacket(char* message, int id)
+{
+	SC_CHAT_PACKET p;
+	p.size = sizeof(SC_CHAT_PACKET);
+	p.type = SC_CHAT;
+	p.id = id;
+	memcpy(p.message, message, sizeof(message));
+	doSend(&p);
+}
+
 void Player::move(int dir)
 {
 	Astar& map = Astar::getInstance();
@@ -188,13 +369,14 @@ void Player::move(int dir)
 
 	switch (dir) {
 	case 0:
+		
 		if (p_y <= 0 || map._map[p_x][p_y - 1] == 1) setPosy(p_y);
 		else {
 			setPosy(getPosy() - 1);
 		}
 		break;
 	case 1:
-		if (p_y >= 1000 || map._map[p_x][p_y + 1] == 1)setPosy(p_y);
+		if (p_y >= 999 || map._map[p_x][p_y + 1] == 1)setPosy(p_y);
 		else
 			setPosy(getPosy() + 1);
 		break;
@@ -204,7 +386,8 @@ void Player::move(int dir)
 			setPosx(getPosx() - 1);
 		break;
 	case 3:
-		if (p_x >= 1000 || map._map[p_x + 1][p_y] == 1)setPosx(p_x);
+		
+		if (p_x >= 999 || map._map[p_x + 1][p_y] == 1)setPosx(p_x);
 		else
 			setPosx(getPosx() + 1);
 		break;
@@ -219,7 +402,7 @@ void Player::attack()
 		switch (_dir) {
 		case 2: // 왼쪽을 바라보고 있을 때 
 		{
-			if (canatt(getId(), npc) && getPosx() - _npcs[npc].getPosx() >= 0)
+			if (canatt(_id, npc) && getPosx() - _npcs[npc].getPosx() >= 0)
 			{
 				cout << npc << "  우측 에서 몬스터 공격 " << endl;
 				_npcs[npc].setHp(_npcs[npc].getHp() - 10);
@@ -227,19 +410,21 @@ void Player::attack()
 				{
 					_npcs[npc].isalive = false;
 					sendRemovePacket(npc, 2);
+					break;
 				}
 			}
 		}break;
 		case 3: // 오른쪽을 바라보고 있을 떄
 		{
-			if (canatt(getId(), npc) && getPosx() - _npcs[npc].getPosx() <= 0)
+			if (canatt(_id, npc) && getPosx() - _npcs[npc].getPosx() <= 0)
 			{
 				cout << npc << "  좌측  에서 몬스터 공격 " << endl;
-				_npcs[npc].setHp(_npcs[npc].getHp() - 10);
+				_npcs[npc].setHp(_npcs[npc].getHp() - 50);
 				if (_npcs[npc].getHp() <= 0)
 				{
 					_npcs[npc].isalive = false;
 					sendRemovePacket(npc, 2);
+					break;
 				}
 			}
 		}break;
@@ -309,7 +494,7 @@ Monster::Monster()
 
 }
 
-void Monster::move()
+void Monster::MonsterMove()
 {
 	// move를 하는데 여기서 몬스터의 시야거리에 있는 플레이어들에게만 send를 해야함 viewlist 
 	// 시야거리에 있다면? 플레이어를 추격해야함 
@@ -317,31 +502,97 @@ void Monster::move()
 	int myid = getId();
 	int traceclid = -1; // 추격 ID 
 	int nearplayer = -1;
-	for (auto& pl : _clients)
-	{
-		if (pl._state != STATE::Ingame)continue; //움직이기 이전 주변애들 파악 
-		if (pl.can_see(pl.getId(), myid, 2))
-		{
-			traceclid = pl.getId();
-			_prevvl.insert(traceclid);
-			//int dis = calculateDistance(pl.getPosx(), pl.getPosy());
-		/*	if (nearplayer > dis) {
 
-			}*/
+	MAP_SECTION prevsection = _section;
+
+	switch (prevsection) {
+
+	case MAP_SECTION::LEFT_DOWN: {
+		for (auto& pl : _leftdownSection) {
+			if (_clients[pl]._state != STATE::Ingame)continue;
+			if (can_see(pl, myid, 2) == true) {
+				_prevvl.insert(pl);
+				traceclid = pl;
+			}
 		}
+		break;
 	}
+	case MAP_SECTION::LEFT_UP: {
+		for (auto& pl : _leftupSection) {
+			if (_clients[pl]._state != STATE::Ingame)continue;
+			if (can_see(pl, myid, 2) == true) {
+
+				_prevvl.insert(pl);
+				traceclid = pl;
+			}
+		}
+		break;
+	}
+	case MAP_SECTION::RIGHT_DOWN: {
+		for (auto& pl : _rightdownSection) {
+			if (_clients[pl]._state != STATE::Ingame)continue;
+			if (can_see(pl, myid, 2) == true) {
+
+				_prevvl.insert(pl);
+				traceclid = pl;
+			}
+		}
+		break;
+	}
+	case MAP_SECTION::RIGHT_UP: {
+		for (auto& pl : _rightupSection) {
+			if (_clients[pl]._state != STATE::Ingame)continue;
+			if (can_see(pl, myid, 2) == true) {
+				_prevvl.insert(pl);
+				traceclid = pl;
+			}
+		}
+		break;
+	}
+	}
+
 	if (traceclid == -1)return; // moveTowardsPlayer의 호출이 너무많다. 
 	moveTowardsPlayer(_clients[traceclid].getPosx(), _clients[traceclid].getPosy());
 	//randommove();
 	unordered_set<int> _nearvl; // 움직인 후에 뷰리스트
-	for (auto& pl : _clients)
-	{
-		if (pl._state != STATE::Ingame)continue;
-		if (can_see(pl.getId(), myid, 2) == true)
-		{
-			_nearvl.insert(pl.getId());
+
+	MAP_SECTION section = _section;
+	switch (section) {
+
+	case MAP_SECTION::LEFT_DOWN: {
+		for (auto& pl : _leftdownSection) {
+			if (_clients[pl]._state != STATE::Ingame)continue;
+			if (can_see(pl, myid, 2) == true)
+				_nearvl.insert(pl);
 		}
+		break;
 	}
+	case MAP_SECTION::LEFT_UP: {
+		for (auto& pl : _leftupSection) {
+			if (_clients[pl]._state != STATE::Ingame)continue;
+			if (can_see(pl, myid, 2) == true)
+				_nearvl.insert(pl);
+		}
+		break;
+	}
+	case MAP_SECTION::RIGHT_DOWN: {
+		for (auto& pl : _rightdownSection) {
+			if (_clients[pl]._state != STATE::Ingame)continue;
+			if (can_see(pl, myid, 2) == true)
+				_nearvl.insert(pl);
+		}
+		break;
+	}
+	case MAP_SECTION::RIGHT_UP: {
+		for (auto& pl : _rightupSection) {
+			if (_clients[pl]._state != STATE::Ingame)continue;
+			if (can_see(pl, myid, 2) == true)
+				_nearvl.insert(pl);
+		}
+		break;
+	}
+	}
+
 	for (auto pl : _nearvl)
 	{
 		if (_prevvl.count(pl) == 0) // 움직였는데 시야거리에 들어왔다? Init 기존에 원래있었다? Move 
@@ -358,6 +609,7 @@ void Monster::move()
 			if (_clients[pl].monster_view_list.count(myid) == 0) {
 				_clients[pl]._vl.unlock();
 				_clients[pl].sendRemovePacket(myid, 2); // 삭제 
+				isalive = false;
 			}
 			else
 				_clients[pl]._vl.unlock();
@@ -399,6 +651,7 @@ void Monster::moveTowardsPlayer(const short playerx, const short playery)
 		setPosx(nextStep._x);
 		setPosy(nextStep._y);
 		// 이동 후 상태 업데이트
+		setSection(true);
 	}
 }
 

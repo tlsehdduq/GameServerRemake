@@ -3,10 +3,10 @@ C:\Users\tlseh\Desktop\게임서버 포폴\GameServerRemake\2DRPG\Client\client.
 C:\Users\tlseh\Desktop\게임서버 포폴\GameServerRemake\2DRPG\Client\client.cpp(293,19): warning C4305: '인수': 'double'에서 'float'(으)로 잘립니다.
 C:\Users\tlseh\Desktop\게임서버 포폴\GameServerRemake\2DRPG\Client\client.cpp(352,31): warning C4305: '인수': 'double'에서 'float'(으)로 잘립니다.
 C:\Users\tlseh\Desktop\게임서버 포폴\GameServerRemake\2DRPG\Client\client.cpp(352,26): warning C4305: '인수': 'double'에서 'float'(으)로 잘립니다.
-C:\Users\tlseh\Desktop\게임서버 포폴\GameServerRemake\2DRPG\Client\client.cpp(662,15): warning C4267: '초기화 중': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Users\tlseh\Desktop\게임서버 포폴\GameServerRemake\2DRPG\Client\client.cpp(665,42): warning C4244: '인수': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Users\tlseh\Desktop\게임서버 포폴\GameServerRemake\2DRPG\Client\client.cpp(777,98): warning C4267: '=': 'size_t'에서 'unsigned char'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Users\tlseh\Desktop\게임서버 포폴\GameServerRemake\2DRPG\Client\client.cpp(885,15): warning C4267: '초기화 중': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\tlseh\Desktop\게임서버 포폴\GameServerRemake\2DRPG\Client\client.cpp(634,15): warning C4267: '초기화 중': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\tlseh\Desktop\게임서버 포폴\GameServerRemake\2DRPG\Client\client.cpp(637,41): warning C4244: '인수': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\tlseh\Desktop\게임서버 포폴\GameServerRemake\2DRPG\Client\client.cpp(749,98): warning C4267: '=': 'size_t'에서 'unsigned char'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\tlseh\Desktop\게임서버 포폴\GameServerRemake\2DRPG\Client\client.cpp(858,15): warning C4267: '초기화 중': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
   Client.vcxproj -> C:\Users\tlseh\Desktop\게임서버 포폴\GameServerRemake\2DRPG\Client\x64\Debug\Client.exe
   C:\Users\tlseh\Desktop\게임서버 포폴\GameServerRemake\2DRPG\Client\packages\SFML-cpp.redist.2.5.1.1\build\native\bin\x64\Debug\openal32.dll
   1개 파일이 복사되었습니다.

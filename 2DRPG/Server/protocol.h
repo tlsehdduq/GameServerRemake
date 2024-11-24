@@ -4,10 +4,12 @@ constexpr int PORT_NUM = 9000;
 constexpr int BUF_SIZE = 1000;
 constexpr int NAME_SIZE = 20;
 constexpr int CHAT_SIZE = 100;
-constexpr int MAX_USER = 1000;
-constexpr int MAX_NPC = 100000;
+constexpr int MAX_USER = 2000;
+constexpr int MAX_NPC = 200000;
 
 static const int MAPSIZE = 1000;
+constexpr int MAP_X_HALF = MAPSIZE / 2;
+constexpr int MAP_Y_HALF = MAPSIZE / 2;
 
 
 constexpr char CS_LOGIN = 0;
