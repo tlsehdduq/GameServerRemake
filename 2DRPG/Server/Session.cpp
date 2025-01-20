@@ -552,8 +552,8 @@ void Monster::MonsterMove()
 	}
 
 	if (traceclid == -1)return; // moveTowardsPlayer의 호출이 너무많다. 
-	moveTowardsPlayer(_clients[traceclid].getPosx(), _clients[traceclid].getPosy());
-	//randommove();
+	//moveTowardsPlayer(_clients[traceclid].getPosx(), _clients[traceclid].getPosy());
+	randommove();
 	unordered_set<int> _nearvl; // 움직인 후에 뷰리스트
 
 	MAP_SECTION section = _section;

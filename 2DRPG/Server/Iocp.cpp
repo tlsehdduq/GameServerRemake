@@ -69,6 +69,7 @@ void Iocp::Run()
 	CreateIoCompletionPort(reinterpret_cast<HANDLE>(_listensocket), _iocphandle, 9999, 0);
 
 	_clientsocket = WSASocket(AF_INET, SOCK_STREAM, 0, NULL, 0, WSA_FLAG_OVERLAPPED);
+
 	LINGER option;
 	option.l_linger = 0;
 	option.l_onoff = 1;
@@ -89,8 +90,6 @@ void Iocp::Run()
 	int num_thread = thread::hardware_concurrency();
 	for (int i = 0; i < num_thread; ++i)
 		_workerthread.emplace_back(&Iocp::WorkerThread, this);
-
-
 	for (auto& th : _workerthread)
 		th.join();
 }
@@ -174,7 +173,6 @@ void Iocp::WorkerThread()
 					ProcessPacket(static_cast<int>(key), p);
 					p = p + packetsize;
 					remain_data = remain_data - packetsize;
-
 				}
 				else break;
 			}
@@ -187,6 +185,7 @@ void Iocp::WorkerThread()
 		case COMP_TYPE::NPC_UPDATE: {
 			bool keepalive = false;
 			switch (_npcs[over_ex->target_id]._section) {
+
 			case MAP_SECTION::LEFT_DOWN: {
 				for (auto& pl : _leftdownSection) {
 					if (_clients[pl]._state != STATE::Ingame)continue;
@@ -239,7 +238,6 @@ void Iocp::WorkerThread()
 			delete over_ex;
 		}
 								  break;
-
 		case COMP_TYPE::END_ATTACK: {
 			for (auto& pl : _clients)
 			{

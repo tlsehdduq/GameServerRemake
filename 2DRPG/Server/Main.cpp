@@ -15,6 +15,7 @@ unordered_set<int> _leftupNpcSection;
 unordered_set<int> _leftdownNpcSection;
 
 HANDLE _iocphandle;
+
 int main()
 {
 	Iocp iocp;
